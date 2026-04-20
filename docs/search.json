@@ -103,5 +103,40 @@
     "title": "Limpieza de Datos",
     "section": "Guardar datos procesados",
     "text": "Guardar datos procesados\n\ndf_signals.to_parquet('data/processed/signals.parquet', index=False)\nprint(\"Guardado: data/processed/signals.parquet\")\nprint(f\"Tamaño: {Path('data/processed/signals.parquet').stat().st_size / 1024:.1f} KB\")\n\nGuardado: data/processed/signals.parquet\nTamaño: 2702.3 KB\n\n\n\n  \n    El archivo signals.parquet contiene todas las señales diarias\n    para los 15 ETFs entre 2015 y 2024. Las visualizaciones cargan directamente\n    desde este archivo — no es necesario recalcular.\n  \n\n\n\n  \n    ← Anterior\n    Inicio\n  \n  \n    Siguiente →\n    Visualizaciones"
+  },
+  {
+    "objectID": "visualizations.html",
+    "href": "visualizations.html",
+    "title": "Visualizaciones",
+    "section": "",
+    "text": "Paso 2 de 2\n  \n  \n    Cuatro preguntas, cuatro visualizaciones interactivas. Cada gráfico responde\n    una pregunta analítica usando el Information Coefficient (IC) como métrica\n    central de poder predictivo.\nDatos cargados: (213954, 6)"
+  },
+  {
+    "objectID": "visualizations.html#pregunta-01",
+    "href": "visualizations.html#pregunta-01",
+    "title": "Visualizaciones",
+    "section": "Pregunta 01",
+    "text": "Pregunta 01\n\n  Pregunta 01\n  ¿Qué señal tiene mayor poder predictivo por clase de activo?\n\n\n\n\n\n\n\n\n\n\n  Fig 1. IC promedio (correlación de Spearman) entre cada señal y el retorno forward a 21 días, agrupado por clase de activo. Verde = poder predictivo positivo, rojo = negativo.\n\n\n\n  \n    El heatmap revela qué señales funcionan mejor en cada segmento del mercado.\n    Las señales de momentum tienden a ser más efectivas en renta variable,\n    mientras que la reversión a la media muestra mayor consistencia en renta fija.\n    Un IC por encima de 0.05 se considera económicamente significativo en la literatura académica."
+  },
+  {
+    "objectID": "visualizations.html#pregunta-02",
+    "href": "visualizations.html#pregunta-02",
+    "title": "Visualizaciones",
+    "section": "Pregunta 02",
+    "text": "Pregunta 02\n\n  Pregunta 02\n  ¿Cómo varía la efectividad de las señales a lo largo del tiempo?\n\n\n\n\n\n\n\n\n\n\n  Fig 2. IC rolling anual (media móvil de 252 días) para cada señal. La línea punteada marca IC = 0. Haz clic en la leyenda para aislar una señal.\n\n\n\n  \n    La efectividad de las señales no es estable: varía con los regímenes de mercado.\n    El momentum tiende a colapsar en períodos de alta volatilidad (e.g. 2020),\n    mientras que la reversión a la media puede ganar relevancia durante crisis\n    cuando los precios se alejan extremadamente de sus medias históricas."
+  },
+  {
+    "objectID": "visualizations.html#pregunta-03",
+    "href": "visualizations.html#pregunta-03",
+    "title": "Visualizaciones",
+    "section": "Pregunta 03",
+    "text": "Pregunta 03\n\n  Pregunta 03\n  ¿Existe correlación entre señales que permita diversificación?\n\n\n\n\n\n\n\n\n\n\n  Fig 3. Matriz de correlación de Spearman entre las 6 señales. Valores cercanos a 0 indican señales independientes que pueden combinarse para diversificar.\n\n\n\n  \n    Señales con baja correlación entre sí son complementarias: al combinarlas,\n    el ruido se cancela y la señal agregada es más estable. Si dos señales\n    tienen correlación cercana a 1, aportan información redundante y combinarlas\n    no agrega valor."
+  },
+  {
+    "objectID": "visualizations.html#pregunta-04",
+    "href": "visualizations.html#pregunta-04",
+    "title": "Visualizaciones",
+    "section": "Pregunta 04",
+    "text": "Pregunta 04\n\n  Pregunta 04\n  ¿Una combinación simple de señales supera a señales individuales?\n\n\n\n\n\n\n\n\n\n\n  Fig 4. IC Sharpe Ratio anualizado: media del IC diario dividida entre su desviación estándar, escalada a 252 días. La barra ámbar representa la señal combinada (promedio de z-scores).\n\n\n\n  \n    La combinación simple — promedio de z-scores normalizados de las 6 señales —\n    tiende a producir un IC más estable que cualquier señal individual, lo que\n    se traduce en un Sharpe ratio superior. Esto ocurre porque las señales tienen\n    errores de predicción parcialmente independientes que se cancelan al promediar."
   }
 ]
