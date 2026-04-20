@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+# Quarto
+_site/
+.quarto/
+/.quarto/
+*_files/
+**/*.quarto_ipynb
+# Claude
+CLAUDE.md
+
+# Data
+data/

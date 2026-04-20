@@ -1,0 +1,273 @@
+---
+title: "Señales de Alpha en Portafolios de ETFs"
+format:
+  html:
+    toc: false
+---
+
+```{=html}
+<section class="hero">
+  <div class="hero-eyebrow">
+    <span class="section-tag">Visualización de Datos · Maestría</span>
+  </div>
+  <h1 class="hero-title">Señales de Alpha<br>en Portafolios de ETFs</h1>
+  <p class="hero-subtitle">
+    ¿Pueden las señales técnicas — momentum, reversión a la media y volatilidad —
+    predecir retornos futuros en un universo diversificado de activos?
+    Este sitio analiza el poder predictivo de seis señales sobre 18 ETFs
+    entre 2015 y 2024.
+  </p>
+</section>
+```
+
+```{=html}
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-label">Universo</div>
+    <div class="stat-value">18</div>
+    <div class="stat-desc">ETFs multi-activo</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Período</div>
+    <div class="stat-value">10</div>
+    <div class="stat-desc">años · 2015–2024</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Señales</div>
+    <div class="stat-value">6</div>
+    <div class="stat-desc">técnicas evaluadas</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Métrica</div>
+    <div class="stat-value">IC</div>
+    <div class="stat-desc">Information Coefficient</div>
+  </div>
+</div>
+```
+
+## Preguntas Analíticas
+
+```{=html}
+<div class="question-block">
+  <div class="q-label">Pregunta 01</div>
+  <div class="q-text">¿Qué señal tiene mayor poder predictivo por clase de activo?</div>
+</div>
+
+<div class="question-block">
+  <div class="q-label">Pregunta 02</div>
+  <div class="q-text">¿Cómo varía la efectividad de las señales a lo largo del tiempo?</div>
+</div>
+
+<div class="question-block">
+  <div class="q-label">Pregunta 03</div>
+  <div class="q-text">¿Existe correlación entre señales que permita diversificación?</div>
+</div>
+
+<div class="question-block">
+  <div class="q-label">Pregunta 04</div>
+  <div class="q-text">¿Una combinación simple de señales supera a señales individuales?</div>
+</div>
+```
+
+## Universo de Activos
+
+```{=html}
+<table class="etf-table">
+  <thead>
+    <tr>
+      <th>Ticker</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>AUM aprox.</th>
+      <th>Clase</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="etf-group-header"><td colspan="5">Renta Variable EE.UU.</td></tr>
+    <tr>
+      <td class="ticker">SPY</td>
+      <td>SPDR S&amp;P 500 ETF Trust</td>
+      <td>Replica las 500 mayores empresas de EE.UU. por capitalización</td>
+      <td class="aum">~$570 B</td>
+      <td><span class="section-tag">RV US</span></td>
+    </tr>
+    <tr>
+      <td class="ticker">QQQ</td>
+      <td>Invesco QQQ Trust</td>
+      <td>Las 100 mayores empresas no financieras del Nasdaq; sesgo tecnológico</td>
+      <td class="aum">~$300 B</td>
+      <td><span class="section-tag">RV US</span></td>
+    </tr>
+    <tr>
+      <td class="ticker">IWM</td>
+      <td>iShares Russell 2000 ETF</td>
+      <td>Pequeñas empresas de EE.UU.; mayor sensibilidad al ciclo económico</td>
+      <td class="aum">~$70 B</td>
+      <td><span class="section-tag">RV US</span></td>
+    </tr>
+
+    <tr class="etf-group-header"><td colspan="5">Renta Variable Internacional</td></tr>
+    <tr>
+      <td class="ticker">EFA</td>
+      <td>iShares MSCI EAFE ETF</td>
+      <td>Mercados desarrollados de Europa, Australasia y Lejano Oriente</td>
+      <td class="aum">~$65 B</td>
+      <td><span class="section-tag teal">Intl</span></td>
+    </tr>
+    <tr>
+      <td class="ticker">EEM</td>
+      <td>iShares MSCI Emerging Markets ETF</td>
+      <td>Acciones de mercados emergentes globales; incluye China, India, Brasil</td>
+      <td class="aum">~$25 B</td>
+      <td><span class="section-tag teal">Intl</span></td>
+    </tr>
+    <tr>
+      <td class="ticker">VWO</td>
+      <td>Vanguard FTSE Emerging Markets ETF</td>
+      <td>Similar a EEM pero con mayor diversificación y menores comisiones</td>
+      <td class="aum">~$80 B</td>
+      <td><span class="section-tag teal">Intl</span></td>
+    </tr>
+
+    <tr class="etf-group-header"><td colspan="5">Renta Fija</td></tr>
+    <tr>
+      <td class="ticker">TLT</td>
+      <td>iShares 20+ Year Treasury Bond ETF</td>
+      <td>Bonos del Tesoro de EE.UU. a largo plazo; alta sensibilidad a tasas</td>
+      <td class="aum">~$50 B</td>
+      <td><span class="section-tag outline">RF</span></td>
+    </tr>
+    <tr>
+      <td class="ticker">IEF</td>
+      <td>iShares 7-10 Year Treasury Bond ETF</td>
+      <td>Bonos del Tesoro a plazo intermedio; menor duración que TLT</td>
+      <td class="aum">~$30 B</td>
+      <td><span class="section-tag outline">RF</span></td>
+    </tr>
+    <tr>
+      <td class="ticker">LQD</td>
+      <td>iShares iBoxx $ IG Corporate Bond ETF</td>
+      <td>Bonos corporativos grado de inversión en dólares; spreads moderados</td>
+      <td class="aum">~$35 B</td>
+      <td><span class="section-tag outline">RF</span></td>
+    </tr>
+    <tr>
+      <td class="ticker">HYG</td>
+      <td>iShares iBoxx $ High Yield Corporate Bond ETF</td>
+      <td>Bonos corporativos de alto rendimiento; más riesgo de crédito que LQD</td>
+      <td class="aum">~$15 B</td>
+      <td><span class="section-tag outline">RF</span></td>
+    </tr>
+
+    <tr class="etf-group-header"><td colspan="5">Commodities</td></tr>
+    <tr>
+      <td class="ticker">GLD</td>
+      <td>SPDR Gold Shares</td>
+      <td>Replica el precio del oro físico; refugio ante incertidumbre e inflación</td>
+      <td class="aum">~$75 B</td>
+      <td><span class="section-tag">Comm</span></td>
+    </tr>
+    <tr>
+      <td class="ticker">USO</td>
+      <td>United States Oil Fund</td>
+      <td>Futuros de petróleo crudo WTI; alta volatilidad y roll yield negativo</td>
+      <td class="aum">~$1.5 B</td>
+      <td><span class="section-tag">Comm</span></td>
+    </tr>
+    <tr>
+      <td class="ticker">DBC</td>
+      <td>Invesco DB Commodity Index Tracking Fund</td>
+      <td>Índice diversificado de commodities: energía, metales y agricultura</td>
+      <td class="aum">~$2 B</td>
+      <td><span class="section-tag">Comm</span></td>
+    </tr>
+
+    <tr class="etf-group-header"><td colspan="5">Real Estate &amp; Volatilidad</td></tr>
+    <tr>
+      <td class="ticker">VNQ</td>
+      <td>Vanguard Real Estate ETF</td>
+      <td>REITs diversificados de EE.UU.; exposición a bienes raíces cotizados</td>
+      <td class="aum">~$35 B</td>
+      <td><span class="section-tag teal">REIT</span></td>
+    </tr>
+    <tr>
+      <td class="ticker">VXX</td>
+      <td>iPath Series B S&amp;P 500 VIX Short-Term Futures ETN</td>
+      <td>Futuros de corto plazo del VIX; sube con el miedo, decae en tendencia</td>
+      <td class="aum">~$0.5 B</td>
+      <td><span class="section-tag outline">Vol</span></td>
+    </tr>
+  </tbody>
+</table>
+```
+
+## Señales Evaluadas
+
+```{=html}
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-label" style="color:#e8a235">mom_1m</div>
+    <div class="stat-desc">Retorno pasado 21 días · Momentum de corto plazo</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label" style="color:#f5c96a">mom_12m</div>
+    <div class="stat-desc">Retorno pasado 252 días · Momentum de largo plazo</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label" style="color:#3ecfb2">mean_rev</div>
+    <div class="stat-desc">Z-score vs media móvil 20d · Reversión a la media</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label" style="color:#e05c5c">vol_21</div>
+    <div class="stat-desc">Volatilidad realizada 21 días</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label" style="color:#9a9490">rel_vol</div>
+    <div class="stat-desc">Volumen relativo vs promedio 20d</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label" style="color:#9a7fc7">corr_spy</div>
+    <div class="stat-desc">Correlación rolling 60d con SPY</div>
+  </div>
+</div>
+```
+
+## Metodología
+
+```{=html}
+<div class="insight-box">
+  <p>
+    El <strong>Information Coefficient (IC)</strong> mide la correlación de Spearman entre
+    el valor de cada señal y el retorno forward a 21 días. Un IC positivo indica que la
+    señal predice correctamente la dirección del retorno. Los valores típicamente oscilan
+    entre –0.10 y +0.10; cualquier IC sostenido por encima de 0.05 se considera
+    económicamente significativo.
+  </p>
+  <p>
+    Los datos provienen de <code>yfinance</code> (precios de cierre ajustados, 2015–2024).
+    Las señales se calculan sin look-ahead bias: cada valor usa únicamente información
+    disponible en esa fecha.
+  </p>
+</div>
+```
+
+## Explorar el Análisis
+
+```{=html}
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-label">Paso 1</div>
+    <div class="stat-value" style="font-size:1.1rem">
+      <a href="data_cleaning.qmd" style="color:#e8a235;text-decoration:none">Limpieza de Datos →</a>
+    </div>
+    <div class="stat-desc">Descarga, limpieza y cálculo de señales</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Paso 2</div>
+    <div class="stat-value" style="font-size:1.1rem">
+      <a href="visualizations.qmd" style="color:#3ecfb2;text-decoration:none">Visualizaciones →</a>
+    </div>
+    <div class="stat-desc">Las 4 preguntas analíticas respondidas con gráficos interactivos</div>
+  </div>
+</div>
+```

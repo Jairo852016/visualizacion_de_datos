@@ -1,0 +1,312 @@
+---
+title: "Limpieza de Datos"
+---
+
+```{=html}
+<section class="hero" style="padding: 2.5rem 0 1.5rem;">
+  <span class="section-tag">Paso 1 de 2</span>
+  <h1 class="hero-title" style="font-size:2.2rem; margin-top:0.75rem">Descarga y Preparación</h1>
+  <p class="hero-subtitle">
+    Descargamos precios históricos de 15 ETFs desde <code>yfinance</code>,
+    limpiamos los datos y calculamos las 6 señales técnicas que se usarán
+    en el análisis. Todo el proceso es reproducible y sin look-ahead bias.
+  </p>
+</section>
+```
+
+## Dependencias
+
+```{python}
+#| echo: true
+import warnings
+warnings.filterwarnings('ignore')
+
+import yfinance as yf
+import pandas as pd
+import numpy as np
+from pathlib import Path
+
+# Directorios
+Path('data/raw').mkdir(parents=True, exist_ok=True)
+Path('data/processed').mkdir(parents=True, exist_ok=True)
+
+print("Dependencias cargadas correctamente.")
+```
+
+## Descarga de Precios
+
+```{=html}
+<div class="insight-box">
+  <p>
+    Descargamos precios de cierre ajustados (<em>Adj Close</em>) para los 15 ETFs
+    del universo entre el 1 de enero de 2015 y el 31 de diciembre de 2024.
+    Usamos <code>yfinance</code> con <code>auto_adjust=True</code> para obtener
+    precios ya corregidos por dividendos y splits.
+  </p>
+</div>
+```
+
+```{python}
+#| echo: true
+TICKERS = [
+    'SPY', 'QQQ', 'IWM',          # Renta Variable US
+    'EFA', 'EEM', 'VWO',          # Internacional
+    'TLT', 'IEF', 'LQD', 'HYG',  # Renta Fija
+    'GLD', 'USO', 'DBC',          # Commodities
+    'VNQ',                         # Real Estate
+    'VXX',                         # Volatilidad
+]
+
+START = '2015-01-01'
+END   = '2024-12-31'
+
+raw = yf.download(TICKERS, start=START, end=END, auto_adjust=True, progress=False)
+prices = raw['Close'].copy()
+
+print(f"Forma del dataset: {prices.shape}")
+print(f"Período: {prices.index[0].date()} → {prices.index[-1].date()}")
+print(f"Tickers descargados: {list(prices.columns)}")
+```
+
+## Limpieza
+
+```{=html}
+<div class="insight-box">
+  <p>
+    Verificamos datos faltantes. El VXX tiene historial más corto que el resto
+    porque fue relanzado como "Series B" en enero 2018 — se conserva a partir
+    de esa fecha y los NaN anteriores se dejan como están (no se imputan).
+  </p>
+</div>
+```
+
+```{python}
+#| echo: true
+# Datos faltantes por ticker
+missing = prices.isnull().sum()
+missing_pct = (missing / len(prices) * 100).round(2)
+missing_df = pd.DataFrame({'Faltantes': missing, 'Porcentaje': missing_pct})
+missing_df = missing_df[missing_df['Faltantes'] > 0]
+
+if missing_df.empty:
+    print("Sin datos faltantes.")
+else:
+    print(missing_df.to_string())
+
+# Guardar precios crudos
+prices.to_parquet('data/raw/prices.parquet')
+print(f"\nPrecios guardados en data/raw/prices.parquet")
+```
+
+## Retornos Diarios
+
+```{python}
+#| echo: true
+returns = prices.pct_change()
+
+# Eliminar filas donde TODOS los tickers son NaN (e.g. feriados)
+returns = returns.dropna(how='all')
+
+print(f"Retornos calculados: {returns.shape}")
+print(f"\nEstadísticas de retornos diarios:")
+print(returns.describe().round(4).to_string())
+```
+
+## Cálculo de Señales
+
+```{=html}
+<div class="insight-box">
+  <p>
+    Calculamos 6 señales para cada ticker en cada fecha, usando únicamente
+    datos disponibles hasta ese momento. El resultado es un DataFrame largo
+    (<em>long format</em>) con columnas: <code>date</code>, <code>ticker</code>,
+    <code>signal</code>, <code>value</code>, más el retorno forward a 21 días.
+  </p>
+</div>
+```
+
+### Señal 1 — Momentum 1 mes (`mom_1m`)
+
+```{python}
+#| echo: true
+# Retorno acumulado de los últimos 21 días de trading
+mom_1m = returns.rolling(21).apply(lambda x: (1 + x).prod() - 1)
+
+print("mom_1m — últimas 3 fechas (SPY, QQQ, TLT, GLD):")
+print(mom_1m[['SPY', 'QQQ', 'TLT', 'GLD']].tail(3).round(4).to_string())
+```
+
+### Señal 2 — Momentum 12 meses (`mom_12m`)
+
+```{python}
+#| echo: true
+# Retorno de los últimos 252 días excluyendo el último mes (21 días)
+# Evita el efecto de reversión de corto plazo documentado en la literatura
+def mom_12m_func(price_series):
+    ret_12m = price_series.shift(21) / price_series.shift(252) - 1
+    return ret_12m
+
+mom_12m = prices.apply(mom_12m_func)
+
+print("mom_12m — últimas 3 fechas (SPY, QQQ, TLT, GLD):")
+print(mom_12m[['SPY', 'QQQ', 'TLT', 'GLD']].tail(3).round(4).to_string())
+```
+
+### Señal 3 — Reversión a la media (`mean_rev`)
+
+```{python}
+#| echo: true
+# Z-score del precio actual respecto a la media móvil de 20 días
+# Un z-score negativo indica precio por debajo de su media reciente (posible rebote)
+rolling_mean = prices.rolling(20).mean()
+rolling_std  = prices.rolling(20).std()
+mean_rev = (prices - rolling_mean) / rolling_std
+
+print("mean_rev (z-score) — últimas 3 fechas (SPY, QQQ, TLT, GLD):")
+print(mean_rev[['SPY', 'QQQ', 'TLT', 'GLD']].tail(3).round(3).to_string())
+```
+
+### Señal 4 — Volatilidad realizada (`vol_21`)
+
+```{python}
+#| echo: true
+# Desviación estándar de retornos diarios en los últimos 21 días, anualizada
+vol_21 = returns.rolling(21).std() * np.sqrt(252)
+
+print("vol_21 (anualizada) — últimas 3 fechas (SPY, QQQ, TLT, GLD):")
+print(vol_21[['SPY', 'QQQ', 'TLT', 'GLD']].tail(3).round(4).to_string())
+```
+
+### Señal 5 — Volumen relativo (`rel_vol`)
+
+```{python}
+#| echo: true
+# Volumen del día dividido entre el promedio de volumen de los últimos 20 días
+volume = raw['Volume'].copy()
+rel_vol = volume / volume.rolling(20).mean()
+
+print("rel_vol — últimas 3 fechas (SPY, QQQ, TLT, GLD):")
+print(rel_vol[['SPY', 'QQQ', 'TLT', 'GLD']].tail(3).round(3).to_string())
+```
+
+### Señal 6 — Correlación con SPY (`corr_spy`)
+
+```{python}
+#| echo: true
+# Correlación rolling de 60 días entre cada ticker y SPY
+spy_returns = returns['SPY']
+corr_spy = returns.apply(
+    lambda col: col.rolling(60).corr(spy_returns)
+)
+
+print("corr_spy — últimas 3 fechas (IWM, EEM, TLT, GLD, VXX):")
+print(corr_spy[['IWM', 'EEM', 'TLT', 'GLD', 'VXX']].tail(3).round(3).to_string())
+```
+
+### Variable objetivo — Retorno forward 21 días (`fwd_ret_21d`)
+
+```{python}
+#| echo: true
+# Retorno acumulado de los PRÓXIMOS 21 días (shift negativo)
+# Se calcula con shift(-21) para que cada fecha tenga el retorno futuro
+fwd_ret_21d = returns.rolling(21).apply(
+    lambda x: (1 + x).prod() - 1
+).shift(-21)
+
+print("fwd_ret_21d — muestra (primeras fechas con datos válidos):")
+print(fwd_ret_21d[['SPY', 'QQQ', 'TLT', 'GLD']].dropna().head(3).round(4).to_string())
+```
+
+## Ensamblaje en formato largo
+
+```{python}
+#| echo: true
+signal_map = {
+    'mom_1m':    mom_1m,
+    'mom_12m':   mom_12m,
+    'mean_rev':  mean_rev,
+    'vol_21':    vol_21,
+    'rel_vol':   rel_vol,
+    'corr_spy':  corr_spy,
+}
+
+ASSET_CLASS = {
+    'SPY': 'RV US',       'QQQ': 'RV US',   'IWM': 'RV US',
+    'EFA': 'Internacional','EEM': 'Internacional','VWO': 'Internacional',
+    'TLT': 'Renta Fija',  'IEF': 'Renta Fija',
+    'LQD': 'Renta Fija',  'HYG': 'Renta Fija',
+    'GLD': 'Commodities', 'USO': 'Commodities','DBC': 'Commodities',
+    'VNQ': 'Real Estate',
+    'VXX': 'Volatilidad',
+}
+
+frames = []
+for signal_name, df_signal in signal_map.items():
+    melted = df_signal.stack(future_stack=True).reset_index()
+    melted.columns = ['date', 'ticker', 'value']
+    melted['signal'] = signal_name
+    frames.append(melted)
+
+df_signals = pd.concat(frames, ignore_index=True)
+
+# Añadir retorno forward
+fwd = fwd_ret_21d.stack(future_stack=True).reset_index()
+fwd.columns = ['date', 'ticker', 'fwd_ret_21d']
+df_signals = df_signals.merge(fwd, on=['date', 'ticker'], how='left')
+
+# Añadir clase de activo
+df_signals['asset_class'] = df_signals['ticker'].map(ASSET_CLASS)
+
+# Eliminar filas con señal o retorno futuro nulo
+df_signals = df_signals.dropna(subset=['value', 'fwd_ret_21d'])
+
+print(f"Dataset final: {df_signals.shape[0]:,} filas × {df_signals.shape[1]} columnas")
+print(f"\nColumnas: {list(df_signals.columns)}")
+print(f"\nSeñales: {df_signals['signal'].unique().tolist()}")
+print(f"Tickers: {sorted(df_signals['ticker'].unique().tolist())}")
+```
+
+## Resumen del Dataset
+
+```{python}
+#| echo: true
+summary = df_signals.groupby('signal').agg(
+    observaciones=('value', 'count'),
+    media=('value', 'mean'),
+    desv_std=('value', 'std'),
+    minimo=('value', 'min'),
+    maximo=('value', 'max'),
+).round(4)
+
+print(summary.to_string())
+```
+
+## Guardar datos procesados
+
+```{python}
+#| echo: true
+df_signals.to_parquet('data/processed/signals.parquet', index=False)
+print("Guardado: data/processed/signals.parquet")
+print(f"Tamaño: {Path('data/processed/signals.parquet').stat().st_size / 1024:.1f} KB")
+```
+
+```{=html}
+<div class="insight-box">
+  <p>
+    El archivo <code>signals.parquet</code> contiene todas las señales diarias
+    para los 15 ETFs entre 2015 y 2024. Las visualizaciones cargan directamente
+    desde este archivo — no es necesario recalcular.
+  </p>
+</div>
+
+<nav class="page-navigation">
+  <a href="index.qmd" class="nav-page-prev">
+    <span class="nav-page-text">← Anterior</span>
+    <span class="nav-page-title">Inicio</span>
+  </a>
+  <a href="visualizations.qmd" class="nav-page-next">
+    <span class="nav-page-text">Siguiente →</span>
+    <span class="nav-page-title">Visualizaciones</span>
+  </a>
+</nav>
+```

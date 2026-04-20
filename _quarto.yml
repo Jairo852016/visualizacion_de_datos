@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Alpha Signals"
+  page-navigation: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Inicio
+      - href: data_cleaning.qmd
+        text: Limpieza de Datos
+      - href: visualizations.qmd
+        text: Visualizaciones
+
+format:
+  html:
+    theme: cosmo
+    css: theme.css
+    toc: true
+    toc-depth: 2
+    embed-resources: false
