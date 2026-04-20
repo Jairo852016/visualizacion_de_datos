@@ -199,7 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="dependencias" class="level2">
 <h2 class="anchored" data-anchor-id="dependencias">Dependencias</h2>
-<div id="768a4102" class="cell" data-execution_count="1">
+<div id="26daa3bb" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -228,7 +228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     precios ya corregidos por dividendos y splits.
   </p>
 </div>
-<div id="8d5c16e4" class="cell" data-execution_count="2">
+<div id="5ed2fbbe" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>TICKERS <span class="op">=</span> [</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'IWM'</span>,          <span class="co"># Renta Variable US</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'EFA'</span>, <span class="st">'EEM'</span>, <span class="st">'VWO'</span>,          <span class="co"># Internacional</span></span>
@@ -247,6 +247,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Forma del dataset: </span><span class="sc">{</span>prices<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Período: </span><span class="sc">{</span>prices<span class="sc">.</span>index[<span class="dv">0</span>]<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>prices<span class="sc">.</span>index[<span class="op">-</span><span class="dv">1</span>]<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickers descargados: </span><span class="sc">{</span><span class="bu">list</span>(prices.columns)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>$IEF: possibly delisted; no price data found  (1d 2015-01-01 -&gt; 2024-12-31)
+
+1 Failed download:
+['IEF']: possibly delisted; no price data found  (1d 2015-01-01 -&gt; 2024-12-31)</code></pre>
+</div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Forma del dataset: (2515, 15)
 Período: 2015-01-02 → 2024-12-30
@@ -263,24 +269,25 @@ Tickers descargados: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'Q
     de esa fecha y los NaN anteriores se dejan como están (no se imputan).
   </p>
 </div>
-<div id="e99d3206" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos faltantes por ticker</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>missing <span class="op">=</span> prices.isnull().<span class="bu">sum</span>()</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>missing_pct <span class="op">=</span> (missing <span class="op">/</span> <span class="bu">len</span>(prices) <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>missing_df <span class="op">=</span> pd.DataFrame({<span class="st">'Faltantes'</span>: missing, <span class="st">'Porcentaje'</span>: missing_pct})</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>missing_df <span class="op">=</span> missing_df[missing_df[<span class="st">'Faltantes'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> missing_df.empty:</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Sin datos faltantes."</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(missing_df.to_string())</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Guardar precios crudos</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>prices.to_parquet(<span class="st">'data/raw/prices.parquet'</span>)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Precios guardados en data/raw/prices.parquet"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="85a16b9e" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos faltantes por ticker</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>missing <span class="op">=</span> prices.isnull().<span class="bu">sum</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>missing_pct <span class="op">=</span> (missing <span class="op">/</span> <span class="bu">len</span>(prices) <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>missing_df <span class="op">=</span> pd.DataFrame({<span class="st">'Faltantes'</span>: missing, <span class="st">'Porcentaje'</span>: missing_pct})</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>missing_df <span class="op">=</span> missing_df[missing_df[<span class="st">'Faltantes'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> missing_df.empty:</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Sin datos faltantes."</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(missing_df.to_string())</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Guardar precios crudos</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>prices.to_parquet(<span class="st">'data/raw/prices.parquet'</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Precios guardados en data/raw/prices.parquet"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        Faltantes  Porcentaje
 Ticker                       
+IEF          2515      100.00
 VXX           771       30.66
 
 Precios guardados en data/raw/prices.parquet</code></pre>
@@ -289,28 +296,28 @@ Precios guardados en data/raw/prices.parquet</code></pre>
 </section>
 <section id="retornos-diarios" class="level2">
 <h2 class="anchored" data-anchor-id="retornos-diarios">Retornos Diarios</h2>
-<div id="139c74ea" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>returns <span class="op">=</span> prices.pct_change()</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminar filas donde TODOS los tickers son NaN (e.g. feriados)</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>returns <span class="op">=</span> returns.dropna(how<span class="op">=</span><span class="st">'all'</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Retornos calculados: </span><span class="sc">{</span>returns<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Estadísticas de retornos diarios:"</span>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(returns.describe().<span class="bu">round</span>(<span class="dv">4</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="f5af1010" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>returns <span class="op">=</span> prices.pct_change()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminar filas donde TODOS los tickers son NaN (e.g. feriados)</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>returns <span class="op">=</span> returns.dropna(how<span class="op">=</span><span class="st">'all'</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Retornos calculados: </span><span class="sc">{</span>returns<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Estadísticas de retornos diarios:"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(returns.describe().<span class="bu">round</span>(<span class="dv">4</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Retornos calculados: (2514, 15)
 
 Estadísticas de retornos diarios:
-Ticker        DBC        EEM        EFA        GLD        HYG        IEF        IWM        LQD        QQQ        SPY        TLT        USO        VNQ        VWO        VXX
-count   2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  1743.0000
-mean       0.0002     0.0002     0.0003     0.0003     0.0002     0.0000     0.0004     0.0001     0.0008     0.0005    -0.0000     0.0000     0.0003     0.0002    -0.0010
-std        0.0112     0.0130     0.0109     0.0089     0.0054     0.0042     0.0142     0.0054     0.0137     0.0111     0.0096     0.0249     0.0131     0.0125     0.0470
-min       -0.0794    -0.1248    -0.1099    -0.0537    -0.0550    -0.0251    -0.1327    -0.0500    -0.1198    -0.1094    -0.0667    -0.2532    -0.1773    -0.1209    -0.1924
-25%       -0.0059    -0.0067    -0.0048    -0.0046    -0.0019    -0.0024    -0.0069    -0.0023    -0.0051    -0.0037    -0.0058    -0.0121    -0.0058    -0.0064    -0.0263
-50%        0.0008     0.0007     0.0005     0.0005     0.0002     0.0001     0.0008     0.0003     0.0012     0.0006     0.0003     0.0009     0.0006     0.0007    -0.0076
-75%        0.0066     0.0076     0.0059     0.0051     0.0023     0.0025     0.0081     0.0027     0.0079     0.0059     0.0057     0.0133     0.0071     0.0072     0.0160
-max        0.0480     0.0805     0.0847     0.0490     0.0655     0.0264     0.0915     0.0739     0.0847     0.0906     0.0752     0.1667     0.0900     0.0778     0.3922</code></pre>
+Ticker        DBC        EEM        EFA        GLD        HYG  IEF        IWM        LQD        QQQ        SPY        TLT        USO        VNQ        VWO        VXX
+count   2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  0.0  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  1743.0000
+mean       0.0002     0.0002     0.0003     0.0003     0.0002  NaN     0.0004     0.0001     0.0008     0.0005    -0.0000     0.0000     0.0003     0.0002    -0.0010
+std        0.0112     0.0130     0.0109     0.0089     0.0054  NaN     0.0142     0.0054     0.0137     0.0111     0.0096     0.0249     0.0131     0.0125     0.0470
+min       -0.0794    -0.1248    -0.1099    -0.0537    -0.0550  NaN    -0.1327    -0.0500    -0.1198    -0.1094    -0.0667    -0.2532    -0.1773    -0.1209    -0.1924
+25%       -0.0059    -0.0067    -0.0048    -0.0046    -0.0019  NaN    -0.0069    -0.0023    -0.0051    -0.0037    -0.0058    -0.0121    -0.0058    -0.0064    -0.0263
+50%        0.0008     0.0007     0.0005     0.0005     0.0002  NaN     0.0008     0.0003     0.0012     0.0006     0.0003     0.0009     0.0006     0.0007    -0.0076
+75%        0.0066     0.0076     0.0059     0.0051     0.0023  NaN     0.0081     0.0027     0.0079     0.0059     0.0057     0.0133     0.0071     0.0072     0.0160
+max        0.0480     0.0805     0.0847     0.0490     0.0655  NaN     0.0915     0.0739     0.0847     0.0906     0.0752     0.1667     0.0900     0.0778     0.3922</code></pre>
 </div>
 </div>
 </section>
@@ -326,12 +333,12 @@ max        0.0480     0.0805     0.0847     0.0490     0.0655     0.0264     0.0
 </div>
 <section id="señal-1-momentum-1-mes-mom_1m" class="level3">
 <h3 class="anchored" data-anchor-id="señal-1-momentum-1-mes-mom_1m">Señal 1 — Momentum 1 mes (<code>mom_1m</code>)</h3>
-<div id="f9cfb93b" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno acumulado de los últimos 21 días de trading</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>mom_1m <span class="op">=</span> returns.rolling(<span class="dv">21</span>).<span class="bu">apply</span>(<span class="kw">lambda</span> x: (<span class="dv">1</span> <span class="op">+</span> x).prod() <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mom_1m — últimas 3 fechas (SPY, QQQ, TLT, GLD):"</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mom_1m[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">4</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="90e39b89" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno acumulado de los últimos 21 días de trading</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mom_1m <span class="op">=</span> returns.rolling(<span class="dv">21</span>).<span class="bu">apply</span>(<span class="kw">lambda</span> x: (<span class="dv">1</span> <span class="op">+</span> x).prod() <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mom_1m — últimas 3 fechas (SPY, QQQ, TLT, GLD):"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mom_1m[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">4</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>mom_1m — últimas 3 fechas (SPY, QQQ, TLT, GLD):
 Ticker         SPY     QQQ     TLT     GLD
@@ -344,17 +351,17 @@ Date
 </section>
 <section id="señal-2-momentum-12-meses-mom_12m" class="level3">
 <h3 class="anchored" data-anchor-id="señal-2-momentum-12-meses-mom_12m">Señal 2 — Momentum 12 meses (<code>mom_12m</code>)</h3>
-<div id="3c8f5d76" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno de los últimos 252 días excluyendo el último mes (21 días)</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Evita el efecto de reversión de corto plazo documentado en la literatura</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mom_12m_func(price_series):</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    ret_12m <span class="op">=</span> price_series.shift(<span class="dv">21</span>) <span class="op">/</span> price_series.shift(<span class="dv">252</span>) <span class="op">-</span> <span class="dv">1</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ret_12m</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>mom_12m <span class="op">=</span> prices.<span class="bu">apply</span>(mom_12m_func)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mom_12m — últimas 3 fechas (SPY, QQQ, TLT, GLD):"</span>)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mom_12m[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">4</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="9fdd0625" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno de los últimos 252 días excluyendo el último mes (21 días)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Evita el efecto de reversión de corto plazo documentado en la literatura</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mom_12m_func(price_series):</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    ret_12m <span class="op">=</span> price_series.shift(<span class="dv">21</span>) <span class="op">/</span> price_series.shift(<span class="dv">252</span>) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ret_12m</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>mom_12m <span class="op">=</span> prices.<span class="bu">apply</span>(mom_12m_func)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mom_12m — últimas 3 fechas (SPY, QQQ, TLT, GLD):"</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mom_12m[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">4</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>mom_12m — últimas 3 fechas (SPY, QQQ, TLT, GLD):
 Ticker         SPY     QQQ     TLT     GLD
@@ -367,15 +374,15 @@ Date
 </section>
 <section id="señal-3-reversión-a-la-media-mean_rev" class="level3">
 <h3 class="anchored" data-anchor-id="señal-3-reversión-a-la-media-mean_rev">Señal 3 — Reversión a la media (<code>mean_rev</code>)</h3>
-<div id="8f7a4ab0" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Z-score del precio actual respecto a la media móvil de 20 días</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Un z-score negativo indica precio por debajo de su media reciente (posible rebote)</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>rolling_mean <span class="op">=</span> prices.rolling(<span class="dv">20</span>).mean()</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>rolling_std  <span class="op">=</span> prices.rolling(<span class="dv">20</span>).std()</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>mean_rev <span class="op">=</span> (prices <span class="op">-</span> rolling_mean) <span class="op">/</span> rolling_std</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mean_rev (z-score) — últimas 3 fechas (SPY, QQQ, TLT, GLD):"</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mean_rev[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">3</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="28a08e74" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Z-score del precio actual respecto a la media móvil de 20 días</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Un z-score negativo indica precio por debajo de su media reciente (posible rebote)</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>rolling_mean <span class="op">=</span> prices.rolling(<span class="dv">20</span>).mean()</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>rolling_std  <span class="op">=</span> prices.rolling(<span class="dv">20</span>).std()</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>mean_rev <span class="op">=</span> (prices <span class="op">-</span> rolling_mean) <span class="op">/</span> rolling_std</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mean_rev (z-score) — últimas 3 fechas (SPY, QQQ, TLT, GLD):"</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mean_rev[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">3</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>mean_rev (z-score) — últimas 3 fechas (SPY, QQQ, TLT, GLD):
 Ticker        SPY    QQQ    TLT    GLD
@@ -388,12 +395,12 @@ Date
 </section>
 <section id="señal-4-volatilidad-realizada-vol_21" class="level3">
 <h3 class="anchored" data-anchor-id="señal-4-volatilidad-realizada-vol_21">Señal 4 — Volatilidad realizada (<code>vol_21</code>)</h3>
-<div id="48a9c0fe" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Desviación estándar de retornos diarios en los últimos 21 días, anualizada</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>vol_21 <span class="op">=</span> returns.rolling(<span class="dv">21</span>).std() <span class="op">*</span> np.sqrt(<span class="dv">252</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"vol_21 (anualizada) — últimas 3 fechas (SPY, QQQ, TLT, GLD):"</span>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(vol_21[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">4</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="964b23d3" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Desviación estándar de retornos diarios en los últimos 21 días, anualizada</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>vol_21 <span class="op">=</span> returns.rolling(<span class="dv">21</span>).std() <span class="op">*</span> np.sqrt(<span class="dv">252</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"vol_21 (anualizada) — últimas 3 fechas (SPY, QQQ, TLT, GLD):"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(vol_21[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">4</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>vol_21 (anualizada) — últimas 3 fechas (SPY, QQQ, TLT, GLD):
 Ticker        SPY     QQQ     TLT     GLD
@@ -406,13 +413,13 @@ Date
 </section>
 <section id="señal-5-volumen-relativo-rel_vol" class="level3">
 <h3 class="anchored" data-anchor-id="señal-5-volumen-relativo-rel_vol">Señal 5 — Volumen relativo (<code>rel_vol</code>)</h3>
-<div id="c4a6be63" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Volumen del día dividido entre el promedio de volumen de los últimos 20 días</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>volume <span class="op">=</span> raw[<span class="st">'Volume'</span>].copy()</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>rel_vol <span class="op">=</span> volume <span class="op">/</span> volume.rolling(<span class="dv">20</span>).mean()</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"rel_vol — últimas 3 fechas (SPY, QQQ, TLT, GLD):"</span>)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rel_vol[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">3</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="3c4ea1cb" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Volumen del día dividido entre el promedio de volumen de los últimos 20 días</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>volume <span class="op">=</span> raw[<span class="st">'Volume'</span>].copy()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>rel_vol <span class="op">=</span> volume <span class="op">/</span> volume.rolling(<span class="dv">20</span>).mean()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"rel_vol — últimas 3 fechas (SPY, QQQ, TLT, GLD):"</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rel_vol[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">3</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>rel_vol — últimas 3 fechas (SPY, QQQ, TLT, GLD):
 Ticker        SPY    QQQ    TLT    GLD
@@ -425,15 +432,15 @@ Date
 </section>
 <section id="señal-6-correlación-con-spy-corr_spy" class="level3">
 <h3 class="anchored" data-anchor-id="señal-6-correlación-con-spy-corr_spy">Señal 6 — Correlación con SPY (<code>corr_spy</code>)</h3>
-<div id="5f475789" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlación rolling de 60 días entre cada ticker y SPY</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>spy_returns <span class="op">=</span> returns[<span class="st">'SPY'</span>]</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>corr_spy <span class="op">=</span> returns.<span class="bu">apply</span>(</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> col: col.rolling(<span class="dv">60</span>).corr(spy_returns)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"corr_spy — últimas 3 fechas (IWM, EEM, TLT, GLD, VXX):"</span>)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(corr_spy[[<span class="st">'IWM'</span>, <span class="st">'EEM'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>, <span class="st">'VXX'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">3</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="c76f9fef" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlación rolling de 60 días entre cada ticker y SPY</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>spy_returns <span class="op">=</span> returns[<span class="st">'SPY'</span>]</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>corr_spy <span class="op">=</span> returns.<span class="bu">apply</span>(</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> col: col.rolling(<span class="dv">60</span>).corr(spy_returns)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"corr_spy — últimas 3 fechas (IWM, EEM, TLT, GLD, VXX):"</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(corr_spy[[<span class="st">'IWM'</span>, <span class="st">'EEM'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>, <span class="st">'VXX'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">3</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>corr_spy — últimas 3 fechas (IWM, EEM, TLT, GLD, VXX):
 Ticker        IWM    EEM    TLT    GLD    VXX
@@ -446,15 +453,15 @@ Date
 </section>
 <section id="variable-objetivo-retorno-forward-21-días-fwd_ret_21d" class="level3">
 <h3 class="anchored" data-anchor-id="variable-objetivo-retorno-forward-21-días-fwd_ret_21d">Variable objetivo — Retorno forward 21 días (<code>fwd_ret_21d</code>)</h3>
-<div id="febdf2e2" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno acumulado de los PRÓXIMOS 21 días (shift negativo)</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Se calcula con shift(-21) para que cada fecha tenga el retorno futuro</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>fwd_ret_21d <span class="op">=</span> returns.rolling(<span class="dv">21</span>).<span class="bu">apply</span>(</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> x: (<span class="dv">1</span> <span class="op">+</span> x).prod() <span class="op">-</span> <span class="dv">1</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>).shift(<span class="op">-</span><span class="dv">21</span>)</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"fwd_ret_21d — muestra (primeras fechas con datos válidos):"</span>)</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fwd_ret_21d[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].dropna().head(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">4</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="26cc7e68" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno acumulado de los PRÓXIMOS 21 días (shift negativo)</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Se calcula con shift(-21) para que cada fecha tenga el retorno futuro</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>fwd_ret_21d <span class="op">=</span> returns.rolling(<span class="dv">21</span>).<span class="bu">apply</span>(</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> x: (<span class="dv">1</span> <span class="op">+</span> x).prod() <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>).shift(<span class="op">-</span><span class="dv">21</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"fwd_ret_21d — muestra (primeras fechas con datos válidos):"</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fwd_ret_21d[[<span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>]].dropna().head(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">4</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>fwd_ret_21d — muestra (primeras fechas con datos válidos):
 Ticker         SPY     QQQ     TLT     GLD
@@ -468,93 +475,93 @@ Date
 </section>
 <section id="ensamblaje-en-formato-largo" class="level2">
 <h2 class="anchored" data-anchor-id="ensamblaje-en-formato-largo">Ensamblaje en formato largo</h2>
-<div id="6ec8b059" class="cell" data-execution_count="12">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>signal_map <span class="op">=</span> {</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mom_1m'</span>:    mom_1m,</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mom_12m'</span>:   mom_12m,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mean_rev'</span>:  mean_rev,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'vol_21'</span>:    vol_21,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'rel_vol'</span>:   rel_vol,</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'corr_spy'</span>:  corr_spy,</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>ASSET_CLASS <span class="op">=</span> {</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'SPY'</span>: <span class="st">'RV US'</span>,       <span class="st">'QQQ'</span>: <span class="st">'RV US'</span>,   <span class="st">'IWM'</span>: <span class="st">'RV US'</span>,</span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'EFA'</span>: <span class="st">'Internacional'</span>,<span class="st">'EEM'</span>: <span class="st">'Internacional'</span>,<span class="st">'VWO'</span>: <span class="st">'Internacional'</span>,</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'TLT'</span>: <span class="st">'Renta Fija'</span>,  <span class="st">'IEF'</span>: <span class="st">'Renta Fija'</span>,</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'LQD'</span>: <span class="st">'Renta Fija'</span>,  <span class="st">'HYG'</span>: <span class="st">'Renta Fija'</span>,</span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'GLD'</span>: <span class="st">'Commodities'</span>, <span class="st">'USO'</span>: <span class="st">'Commodities'</span>,<span class="st">'DBC'</span>: <span class="st">'Commodities'</span>,</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">'VNQ'</span>: <span class="st">'Real Estate'</span>,</span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">'VXX'</span>: <span class="st">'Volatilidad'</span>,</span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>frames <span class="op">=</span> []</span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> signal_name, df_signal <span class="kw">in</span> signal_map.items():</span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    melted <span class="op">=</span> df_signal.stack(future_stack<span class="op">=</span><span class="va">True</span>).reset_index()</span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>    melted.columns <span class="op">=</span> [<span class="st">'date'</span>, <span class="st">'ticker'</span>, <span class="st">'value'</span>]</span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>    melted[<span class="st">'signal'</span>] <span class="op">=</span> signal_name</span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>    frames.append(melted)</span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>df_signals <span class="op">=</span> pd.concat(frames, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Añadir retorno forward</span></span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>fwd <span class="op">=</span> fwd_ret_21d.stack(future_stack<span class="op">=</span><span class="va">True</span>).reset_index()</span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>fwd.columns <span class="op">=</span> [<span class="st">'date'</span>, <span class="st">'ticker'</span>, <span class="st">'fwd_ret_21d'</span>]</span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>df_signals <span class="op">=</span> df_signals.merge(fwd, on<span class="op">=</span>[<span class="st">'date'</span>, <span class="st">'ticker'</span>], how<span class="op">=</span><span class="st">'left'</span>)</span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Añadir clase de activo</span></span>
-<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>df_signals[<span class="st">'asset_class'</span>] <span class="op">=</span> df_signals[<span class="st">'ticker'</span>].<span class="bu">map</span>(ASSET_CLASS)</span>
-<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminar filas con señal o retorno futuro nulo</span></span>
-<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>df_signals <span class="op">=</span> df_signals.dropna(subset<span class="op">=</span>[<span class="st">'value'</span>, <span class="st">'fwd_ret_21d'</span>])</span>
-<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Dataset final: </span><span class="sc">{</span>df_signals<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">:,}</span><span class="ss"> filas × </span><span class="sc">{</span>df_signals<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> columnas"</span>)</span>
-<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Columnas: </span><span class="sc">{</span><span class="bu">list</span>(df_signals.columns)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Señales: </span><span class="sc">{</span>df_signals[<span class="st">'signal'</span>]<span class="sc">.</span>unique()<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickers: </span><span class="sc">{</span><span class="bu">sorted</span>(df_signals[<span class="st">'ticker'</span>].unique().tolist())<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="b10c3287" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>signal_map <span class="op">=</span> {</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mom_1m'</span>:    mom_1m,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mom_12m'</span>:   mom_12m,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mean_rev'</span>:  mean_rev,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'vol_21'</span>:    vol_21,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'rel_vol'</span>:   rel_vol,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'corr_spy'</span>:  corr_spy,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>ASSET_CLASS <span class="op">=</span> {</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'SPY'</span>: <span class="st">'RV US'</span>,       <span class="st">'QQQ'</span>: <span class="st">'RV US'</span>,   <span class="st">'IWM'</span>: <span class="st">'RV US'</span>,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'EFA'</span>: <span class="st">'Internacional'</span>,<span class="st">'EEM'</span>: <span class="st">'Internacional'</span>,<span class="st">'VWO'</span>: <span class="st">'Internacional'</span>,</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'TLT'</span>: <span class="st">'Renta Fija'</span>,  <span class="st">'IEF'</span>: <span class="st">'Renta Fija'</span>,</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'LQD'</span>: <span class="st">'Renta Fija'</span>,  <span class="st">'HYG'</span>: <span class="st">'Renta Fija'</span>,</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'GLD'</span>: <span class="st">'Commodities'</span>, <span class="st">'USO'</span>: <span class="st">'Commodities'</span>,<span class="st">'DBC'</span>: <span class="st">'Commodities'</span>,</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">'VNQ'</span>: <span class="st">'Real Estate'</span>,</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">'VXX'</span>: <span class="st">'Volatilidad'</span>,</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>frames <span class="op">=</span> []</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> signal_name, df_signal <span class="kw">in</span> signal_map.items():</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    melted <span class="op">=</span> df_signal.stack(future_stack<span class="op">=</span><span class="va">True</span>).reset_index()</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>    melted.columns <span class="op">=</span> [<span class="st">'date'</span>, <span class="st">'ticker'</span>, <span class="st">'value'</span>]</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    melted[<span class="st">'signal'</span>] <span class="op">=</span> signal_name</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>    frames.append(melted)</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>df_signals <span class="op">=</span> pd.concat(frames, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Añadir retorno forward</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>fwd <span class="op">=</span> fwd_ret_21d.stack(future_stack<span class="op">=</span><span class="va">True</span>).reset_index()</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>fwd.columns <span class="op">=</span> [<span class="st">'date'</span>, <span class="st">'ticker'</span>, <span class="st">'fwd_ret_21d'</span>]</span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>df_signals <span class="op">=</span> df_signals.merge(fwd, on<span class="op">=</span>[<span class="st">'date'</span>, <span class="st">'ticker'</span>], how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Añadir clase de activo</span></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>df_signals[<span class="st">'asset_class'</span>] <span class="op">=</span> df_signals[<span class="st">'ticker'</span>].<span class="bu">map</span>(ASSET_CLASS)</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminar filas con señal o retorno futuro nulo</span></span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>df_signals <span class="op">=</span> df_signals.dropna(subset<span class="op">=</span>[<span class="st">'value'</span>, <span class="st">'fwd_ret_21d'</span>])</span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Dataset final: </span><span class="sc">{</span>df_signals<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">:,}</span><span class="ss"> filas × </span><span class="sc">{</span>df_signals<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> columnas"</span>)</span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Columnas: </span><span class="sc">{</span><span class="bu">list</span>(df_signals.columns)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Señales: </span><span class="sc">{</span>df_signals[<span class="st">'signal'</span>]<span class="sc">.</span>unique()<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickers: </span><span class="sc">{</span><span class="bu">sorted</span>(df_signals[<span class="st">'ticker'</span>].unique().tolist())<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Dataset final: 213,954 filas × 6 columnas
+<pre><code>Dataset final: 199,382 filas × 6 columnas
 
 Columnas: ['date', 'ticker', 'value', 'signal', 'fwd_ret_21d', 'asset_class']
 
 Señales: ['mom_1m', 'mom_12m', 'mean_rev', 'vol_21', 'rel_vol', 'corr_spy']
-Tickers: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'QQQ', 'SPY', 'TLT', 'USO', 'VNQ', 'VWO', 'VXX']</code></pre>
+Tickers: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IWM', 'LQD', 'QQQ', 'SPY', 'TLT', 'USO', 'VNQ', 'VWO', 'VXX']</code></pre>
 </div>
 </div>
 </section>
 <section id="resumen-del-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="resumen-del-dataset">Resumen del Dataset</h2>
-<div id="bf6aa932" class="cell" data-execution_count="13">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> df_signals.groupby(<span class="st">'signal'</span>).agg(</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    observaciones<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'count'</span>),</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    media<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'mean'</span>),</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    desv_std<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'std'</span>),</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    minimo<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'min'</span>),</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    maximo<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'max'</span>),</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>).<span class="bu">round</span>(<span class="dv">4</span>)</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(summary.to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="b375bba5" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> df_signals.groupby(<span class="st">'signal'</span>).agg(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    observaciones<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'count'</span>),</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    media<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'mean'</span>),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    desv_std<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'std'</span>),</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    minimo<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'min'</span>),</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    maximo<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'max'</span>),</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>).<span class="bu">round</span>(<span class="dv">4</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(summary.to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          observaciones   media  desv_std  minimo   maximo
 signal                                                    
-corr_spy          35739  0.4167    0.5053 -0.9587   1.0000
-mean_rev          36354  0.1551    1.2961 -3.7938   3.9448
-mom_12m           32859  0.0429    0.2199 -0.8260   1.6651
-mom_1m            36324  0.0040    0.0817 -0.5756   4.0145
-rel_vol           36354  1.0120    0.4419  0.0000  16.2761
-vol_21            36324  0.1822    0.1695  0.0149   2.2343</code></pre>
+corr_spy          33305  0.4620    0.4867 -0.9587   1.0000
+mean_rev          33879  0.1643    1.2952 -3.7938   3.9448
+mom_12m           30617  0.0455    0.2268 -0.8260   1.6651
+mom_1m            33851  0.0042    0.0845 -0.5756   4.0145
+rel_vol           33879  1.0119    0.4302  0.0000  16.2761
+vol_21            33851  0.1910    0.1721  0.0149   2.2343</code></pre>
 </div>
 </div>
 </section>
 <section id="guardar-datos-procesados" class="level2">
 <h2 class="anchored" data-anchor-id="guardar-datos-procesados">Guardar datos procesados</h2>
-<div id="856a5666" class="cell" data-execution_count="14">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_signals.to_parquet(<span class="st">'data/processed/signals.parquet'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Guardado: data/processed/signals.parquet"</span>)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tamaño: </span><span class="sc">{</span>Path(<span class="st">'data/processed/signals.parquet'</span>)<span class="sc">.</span>stat()<span class="sc">.</span>st_size <span class="op">/</span> <span class="dv">1024</span><span class="sc">:.1f}</span><span class="ss"> KB"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="a96a0795" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df_signals.to_parquet(<span class="st">'data/processed/signals.parquet'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Guardado: data/processed/signals.parquet"</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tamaño: </span><span class="sc">{</span>Path(<span class="st">'data/processed/signals.parquet'</span>)<span class="sc">.</span>stat()<span class="sc">.</span>st_size <span class="op">/</span> <span class="dv">1024</span><span class="sc">:.1f}</span><span class="ss"> KB"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Guardado: data/processed/signals.parquet
-Tamaño: 2702.3 KB</code></pre>
+Tamaño: 2538.3 KB</code></pre>
 </div>
 </div>
 <div class="insight-box">
