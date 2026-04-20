@@ -62,9 +62,9 @@ body { background-color: var(--bg-primary) !important; color: var(--text-primary
 .navbar { background-color: rgba(13,15,19,0.92) !important; border-bottom: 1px solid var(--border-subtle) !important; }
 .bg-light, .bg-body { background-color: var(--bg-primary) !important; }
 .text-muted { color: var(--text-muted) !important; }
-a { color: var(--accent-primary); }
+a { color: var(--accent-primary); text-decoration: none; }
 a:hover { color: var(--accent-dim); }
-pre, code { background: transparent; }
+pre, code { background: var(--bg-elevated) !important; }
 
 /* ── Reset & Base ── */
 *, *::before, *::after {
@@ -269,26 +269,26 @@ em {
 
 /* ── Links ── */
 a {
-  color: var(--accent-primary);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease, opacity 0.2s ease;
+  color: var(--accent-primary) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(232, 162, 53, 0.3);
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 a:hover {
+  color: var(--accent-dim) !important;
   border-bottom-color: var(--accent-primary);
-  opacity: 0.85;
 }
 
 /* ── Code ── */
 code {
-  font-family: var(--font-mono);
-  font-size: 0.82em;
-  background: var(--bg-elevated);
-  color: var(--teal);
-  padding: 0.15em 0.45em;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-subtle);
+  font-family: var(--font-mono) !important;
+  font-size: 0.82em !important;
+  background: var(--bg-elevated) !important;
+  color: var(--accent-primary) !important;
+  padding: 0.15em 0.45em !important;
+  border-radius: var(--radius-sm) !important;
+  border: 1px solid var(--border-subtle) !important;
 }
 
 pre {

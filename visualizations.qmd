@@ -92,7 +92,7 @@ print("Datos cargados:", df.shape)
 ```
 
 ```{python}
-#| echo: false
+#| echo: true
 # ── Calcular IC por señal × clase de activo ─────────────────────────────────
 def spearman_ic(grp):
     x = grp['value']
@@ -146,8 +146,8 @@ text = alt.Chart(ic_df).mark_text(
     text=alt.Text('ic:Q', format='.3f'),
     color=alt.condition(
         'abs(datum.ic) > 0.04',
-        alt.value('#0d0f13'),
-        alt.value('#5c5a56')
+        alt.value('#e8e6e0'),
+        alt.value('#0d0f13')
     )
 )
 
@@ -182,7 +182,7 @@ chart_p1
 ```
 
 ```{python}
-#| echo: false
+#| echo: true
 # ── IC rolling anual (252 días) ──────────────────────────────────────────────
 records = []
 for signal in SIGNAL_ORDER:
@@ -194,7 +194,8 @@ for signal in SIGNAL_ORDER:
         .groupby('date')
         .apply(lambda g: stats.spearmanr(g['value'], g['fwd_ret_21d'])[0]
                if len(g) >= 5 else np.nan, include_groups=False)
-        .reset_index(name='daily_ic')
+        .reset_index()
+        .rename(columns={0: 'daily_ic'})
     )
     daily['rolling_ic'] = daily['daily_ic'].rolling(252, min_periods=60).mean()
     daily['signal'] = signal
@@ -277,7 +278,7 @@ chart_p2
 ```
 
 ```{python}
-#| echo: false
+#| echo: true
 # ── Matriz de correlación entre señales ──────────────────────────────────────
 pivot = df.pivot_table(
     index=['date', 'ticker'],
@@ -358,7 +359,7 @@ chart_p3
 ```
 
 ```{python}
-#| echo: false
+#| echo: true
 # ── Calcular Sharpe del IC diario por señal ──────────────────────────────────
 sharpe_records = []
 
@@ -469,4 +470,12 @@ chart_p4
     errores de predicción parcialmente independientes que se cancelan al promediar.
   </p>
 </div>
+
+<nav class="page-navigation">
+  <a href="data_cleaning.qmd" class="nav-page-prev">
+    <span class="nav-page-text">← Anterior</span>
+    <span class="nav-page-title">Limpieza de Datos</span>
+  </a>
+  <div></div>
+</nav>
 ```

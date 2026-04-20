@@ -254,20 +254,66 @@ format:
 ## Explorar el Análisis
 
 ```{=html}
-<div class="stat-grid">
-  <div class="stat-card">
-    <div class="stat-label">Paso 1</div>
-    <div class="stat-value" style="font-size:1.1rem">
-      <a href="data_cleaning.qmd" style="color:#e8a235;text-decoration:none">Limpieza de Datos →</a>
-    </div>
-    <div class="stat-desc">Descarga, limpieza y cálculo de señales</div>
+<p style="color:#9a9490; font-family:'DM Sans',sans-serif; font-size:0.95rem; margin-bottom:2rem; line-height:1.7;">
+  El análisis sigue un flujo de dos etapas: primero se construye el dataset limpio con
+  las señales técnicas, luego se responden las preguntas analíticas con visualizaciones
+  interactivas. Cada etapa es independiente — los datos procesados se guardan en
+  <code>signals.parquet</code> para que las visualizaciones carguen al instante.
+</p>
+
+<div style="display:flex; align-items:stretch; gap:0; margin-bottom:2.5rem; font-family:'IBM Plex Mono',monospace;">
+
+  <!-- Nodo 1: Fuente -->
+  <div style="flex:1; background:#181c26; border:1px solid rgba(255,255,255,0.08); border-radius:10px 0 0 10px; padding:1.25rem 1rem; text-align:center;">
+    <div style="font-size:1.5rem; margin-bottom:0.5rem;">📥</div>
+    <div style="color:#5c5a56; font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.35rem;">Fuente</div>
+    <div style="color:#e8e6e0; font-size:0.8rem; font-weight:600; margin-bottom:0.5rem;">yfinance</div>
+    <div style="color:#5c5a56; font-size:0.68rem; line-height:1.5;">18 ETFs<br>2015 – 2024<br>precio ajustado diario</div>
   </div>
-  <div class="stat-card">
-    <div class="stat-label">Paso 2</div>
-    <div class="stat-value" style="font-size:1.1rem">
-      <a href="visualizations.qmd" style="color:#3ecfb2;text-decoration:none">Visualizaciones →</a>
-    </div>
-    <div class="stat-desc">Las 4 preguntas analíticas respondidas con gráficos interactivos</div>
+
+  <!-- Flecha -->
+  <div style="display:flex; align-items:center; padding:0 0.3rem; color:#e8a235; font-size:1.1rem;">→</div>
+
+  <!-- Nodo 2: Limpieza -->
+  <div style="flex:1.3; background:#1e2330; border:1px solid rgba(232,162,53,0.3); border-radius:0; padding:1.25rem 1rem; text-align:center; position:relative;">
+    <div style="position:absolute; top:-9px; left:50%; transform:translateX(-50%); background:#e8a235; color:#0d0f13; font-size:0.6rem; font-weight:700; letter-spacing:0.1em; padding:2px 8px; border-radius:4px;">PASO 1</div>
+    <div style="font-size:1.5rem; margin-bottom:0.5rem;">⚙️</div>
+    <div style="color:#e8a235; font-size:0.75rem; font-weight:700; margin-bottom:0.5rem;">Limpieza & Señales</div>
+    <div style="color:#9a9490; font-size:0.68rem; line-height:1.6;">Retornos · Normalización<br>6 señales técnicas<br>IC cross-sectional</div>
   </div>
+
+  <!-- Flecha -->
+  <div style="display:flex; align-items:center; padding:0 0.3rem; color:#e8a235; font-size:1.1rem;">→</div>
+
+  <!-- Nodo 3: Parquet -->
+  <div style="flex:0.85; background:#181c26; border:1px solid rgba(255,255,255,0.08); border-radius:0; padding:1.25rem 1rem; text-align:center;">
+    <div style="font-size:1.5rem; margin-bottom:0.5rem;">💾</div>
+    <div style="color:#5c5a56; font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.35rem;">Dataset</div>
+    <div style="color:#e8e6e0; font-size:0.75rem; font-weight:600; margin-bottom:0.5rem;">signals.parquet</div>
+    <div style="color:#5c5a56; font-size:0.68rem; line-height:1.5;">~450 k filas<br>formato columnar</div>
+  </div>
+
+  <!-- Flecha -->
+  <div style="display:flex; align-items:center; padding:0 0.3rem; color:#3ecfb2; font-size:1.1rem;">→</div>
+
+  <!-- Nodo 4: Visualizaciones -->
+  <div style="flex:1.3; background:#1e2330; border:1px solid rgba(62,207,178,0.3); border-radius:0 10px 10px 0; padding:1.25rem 1rem; text-align:center; position:relative;">
+    <div style="position:absolute; top:-9px; left:50%; transform:translateX(-50%); background:#3ecfb2; color:#0d0f13; font-size:0.6rem; font-weight:700; letter-spacing:0.1em; padding:2px 8px; border-radius:4px;">PASO 2</div>
+    <div style="font-size:1.5rem; margin-bottom:0.5rem;">📊</div>
+    <div style="color:#3ecfb2; font-size:0.75rem; font-weight:700; margin-bottom:0.5rem;">Visualizaciones</div>
+    <div style="color:#9a9490; font-size:0.68rem; line-height:1.6;">4 preguntas analíticas<br>charts Altair interactivos<br>IC · Rolling · Sharpe</div>
+  </div>
+
 </div>
+```
+
+
+```{=html}
+<nav class="page-navigation">
+  <div></div>
+  <a href="data_cleaning.qmd" class="nav-page-next">
+    <span class="nav-page-text">Siguiente →</span>
+    <span class="nav-page-title">Limpieza de Datos</span>
+  </a>
+</nav>
 ```

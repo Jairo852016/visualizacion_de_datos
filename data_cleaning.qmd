@@ -127,6 +127,19 @@ print(returns.describe().round(4).to_string())
 
 ### Señal 1 — Momentum 1 mes (`mom_1m`)
 
+```{=html}
+<div class="insight-box" style="margin-bottom:1rem;">
+  <p>
+    <strong>¿Qué mide?</strong> Si un activo subió en el último mes, ¿seguirá subiendo?
+    Esta señal captura el <em>impulso reciente</em>: calcula el retorno acumulado de los
+    últimos 21 días de trading (≈ 1 mes). Un valor positivo significa que el precio lleva
+    subiendo; negativo, que lleva bajando. La idea intuitiva es que los mercados tienden
+    a continuar su tendencia de corto plazo — como un objeto en movimiento que mantiene
+    su inercia.
+  </p>
+</div>
+```
+
 ```{python}
 #| echo: true
 # Retorno acumulado de los últimos 21 días de trading
@@ -137,6 +150,19 @@ print(mom_1m[['SPY', 'QQQ', 'TLT', 'GLD']].tail(3).round(4).to_string())
 ```
 
 ### Señal 2 — Momentum 12 meses (`mom_12m`)
+
+```{=html}
+<div class="insight-box" style="margin-bottom:1rem;">
+  <p>
+    <strong>¿Qué mide?</strong> Si un activo tuvo un buen año, ¿seguirá haciéndolo bien
+    el próximo mes? Esta señal mira el retorno de los últimos 12 meses, pero
+    <em>ignorando el último mes</em> — ese detalle es importante: la literatura financiera
+    muestra que el mes más reciente tiende a revertirse (lo que subió mucho la semana
+    pasada suele corregir), mientras que la tendencia del año completo sí persiste.
+    Es como distinguir entre una moda pasajera y una tendencia real.
+  </p>
+</div>
+```
 
 ```{python}
 #| echo: true
@@ -154,6 +180,19 @@ print(mom_12m[['SPY', 'QQQ', 'TLT', 'GLD']].tail(3).round(4).to_string())
 
 ### Señal 3 — Reversión a la media (`mean_rev`)
 
+```{=html}
+<div class="insight-box" style="margin-bottom:1rem;">
+  <p>
+    <strong>¿Qué mide?</strong> ¿Está el precio demasiado lejos de su nivel "normal"?
+    Esta señal calcula cuántas desviaciones estándar se aleja el precio actual de su
+    promedio de los últimos 20 días — esto se llama <em>z-score</em>. Un valor de −2
+    significa que el precio está muy por debajo de lo habitual (posible oportunidad de
+    compra si el mercado corrige). Un valor de +2 indica lo contrario. La lógica es que
+    los precios tienden a volver a su media, como un péndulo que oscila.
+  </p>
+</div>
+```
+
 ```{python}
 #| echo: true
 # Z-score del precio actual respecto a la media móvil de 20 días
@@ -168,6 +207,19 @@ print(mean_rev[['SPY', 'QQQ', 'TLT', 'GLD']].tail(3).round(3).to_string())
 
 ### Señal 4 — Volatilidad realizada (`vol_21`)
 
+```{=html}
+<div class="insight-box" style="margin-bottom:1rem;">
+  <p>
+    <strong>¿Qué mide?</strong> ¿Qué tan agitado estuvo el activo en el último mes?
+    La volatilidad realizada mide cuánto varía el precio día a día. Un valor alto indica
+    un activo impredecible con movimientos bruscos (como una acción tecnológica en una
+    crisis); un valor bajo indica estabilidad (como un bono del tesoro en tiempos calmos).
+    Esta señal es útil porque los períodos de alta volatilidad tienden a persistir — si
+    el mercado está nervioso hoy, probablemente seguirá nervioso mañana.
+  </p>
+</div>
+```
+
 ```{python}
 #| echo: true
 # Desviación estándar de retornos diarios en los últimos 21 días, anualizada
@@ -178,6 +230,19 @@ print(vol_21[['SPY', 'QQQ', 'TLT', 'GLD']].tail(3).round(4).to_string())
 ```
 
 ### Señal 5 — Volumen relativo (`rel_vol`)
+
+```{=html}
+<div class="insight-box" style="margin-bottom:1rem;">
+  <p>
+    <strong>¿Qué mide?</strong> ¿Hay más gente comprando y vendiendo de lo habitual?
+    El volumen relativo compara cuántas acciones se transaccionaron hoy versus el
+    promedio de los últimos 20 días. Un valor de 2.0 significa que se operó el doble
+    de lo normal — señal de que algo importante está pasando. Los picos de volumen
+    suelen acompañar noticias relevantes o cambios de tendencia. Un día con precio
+    subiendo <em>y</em> volumen alto es más confiable que uno con volumen bajo.
+  </p>
+</div>
+```
 
 ```{python}
 #| echo: true
@@ -190,6 +255,20 @@ print(rel_vol[['SPY', 'QQQ', 'TLT', 'GLD']].tail(3).round(3).to_string())
 ```
 
 ### Señal 6 — Correlación con SPY (`corr_spy`)
+
+```{=html}
+<div class="insight-box" style="margin-bottom:1rem;">
+  <p>
+    <strong>¿Qué mide?</strong> ¿Se mueve este activo al ritmo del mercado general?
+    El SPY es el ETF que replica al S&P 500 — el índice que representa a las 500
+    empresas más grandes de EE.UU. y se usa como termómetro del mercado. Una correlación
+    de 1.0 significa que el activo sube y baja exactamente junto con el mercado; de 0,
+    que se mueve independientemente; de −1, que va en sentido contrario (como el oro o
+    ciertos bonos en momentos de pánico). Esta señal ayuda a detectar si un activo
+    ofrece diversificación real o si es simplemente "más de lo mismo".
+  </p>
+</div>
+```
 
 ```{python}
 #| echo: true
