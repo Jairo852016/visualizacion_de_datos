@@ -199,7 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="dependencias" class="level2">
 <h2 class="anchored" data-anchor-id="dependencias">Dependencias</h2>
-<div id="a8398941" class="cell" data-execution_count="1">
+<div id="2936dbc3" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -228,7 +228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     precios ya corregidos por dividendos y splits.
   </p>
 </div>
-<div id="9c90102d" class="cell" data-execution_count="2">
+<div id="3be246c3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>TICKERS <span class="op">=</span> [</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'IWM'</span>,          <span class="co"># Renta Variable US</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'EFA'</span>, <span class="st">'EEM'</span>, <span class="st">'VWO'</span>,          <span class="co"># Internacional</span></span>
@@ -263,7 +263,7 @@ Tickers descargados: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'Q
     de esa fecha y los NaN anteriores se dejan como están (no se imputan).
   </p>
 </div>
-<div id="c6d3b88c" class="cell" data-execution_count="3">
+<div id="70aead6e" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos faltantes por ticker</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>missing <span class="op">=</span> prices.isnull().<span class="bu">sum</span>()</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>missing_pct <span class="op">=</span> (missing <span class="op">/</span> <span class="bu">len</span>(prices) <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
@@ -289,7 +289,7 @@ Precios guardados en data/raw/prices.parquet</code></pre>
 </section>
 <section id="retornos-diarios" class="level2">
 <h2 class="anchored" data-anchor-id="retornos-diarios">Retornos Diarios</h2>
-<div id="3e6da6d5" class="cell" data-execution_count="4">
+<div id="3165c78a" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>returns <span class="op">=</span> prices.pct_change()</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminar filas donde TODOS los tickers son NaN (e.g. feriados)</span></span>
@@ -336,7 +336,7 @@ max        0.0480     0.0805     0.0847     0.0490     0.0655     0.0264     0.0
     su inercia.
   </p>
 </div>
-<div id="e162b170" class="cell" data-execution_count="5">
+<div id="a0fed871" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno acumulado de los últimos 21 días de trading</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>mom_1m <span class="op">=</span> returns.rolling(<span class="dv">21</span>).<span class="bu">apply</span>(<span class="kw">lambda</span> x: (<span class="dv">1</span> <span class="op">+</span> x).prod() <span class="op">-</span> <span class="dv">1</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -364,7 +364,7 @@ Date
     Es como distinguir entre una moda pasajera y una tendencia real.
   </p>
 </div>
-<div id="927b368c" class="cell" data-execution_count="6">
+<div id="3b846093" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno de los últimos 252 días excluyendo el último mes (21 días)</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Evita el efecto de reversión de corto plazo documentado en la literatura</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mom_12m_func(price_series):</span>
@@ -397,7 +397,7 @@ Date
     los precios tienden a volver a su media, como un péndulo que oscila.
   </p>
 </div>
-<div id="bc4b75a1" class="cell" data-execution_count="7">
+<div id="6fd38594" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Z-score del precio actual respecto a la media móvil de 20 días</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Un z-score negativo indica precio por debajo de su media reciente (posible rebote)</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>rolling_mean <span class="op">=</span> prices.rolling(<span class="dv">20</span>).mean()</span>
@@ -428,7 +428,7 @@ Date
     el mercado está nervioso hoy, probablemente seguirá nervioso mañana.
   </p>
 </div>
-<div id="12123756" class="cell" data-execution_count="8">
+<div id="bbacbc42" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Desviación estándar de retornos diarios en los últimos 21 días, anualizada</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>vol_21 <span class="op">=</span> returns.rolling(<span class="dv">21</span>).std() <span class="op">*</span> np.sqrt(<span class="dv">252</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -456,7 +456,7 @@ Date
     subiendo <em>y</em> volumen alto es más confiable que uno con volumen bajo.
   </p>
 </div>
-<div id="ade55d12" class="cell" data-execution_count="9">
+<div id="06595e30" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Volumen del día dividido entre el promedio de volumen de los últimos 20 días</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>volume <span class="op">=</span> raw[<span class="st">'Volume'</span>].copy()</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>rel_vol <span class="op">=</span> volume <span class="op">/</span> volume.rolling(<span class="dv">20</span>).mean()</span>
@@ -475,7 +475,18 @@ Date
 </section>
 <section id="señal-6-correlación-con-spy-corr_spy" class="level3">
 <h3 class="anchored" data-anchor-id="señal-6-correlación-con-spy-corr_spy">Señal 6 — Correlación con SPY (<code>corr_spy</code>)</h3>
-<div id="809f6b43" class="cell" data-execution_count="10">
+<div class="insight-box" style="margin-bottom:1rem;">
+  <p>
+    <strong>¿Qué mide?</strong> ¿Se mueve este activo al ritmo del mercado general?
+    El SPY es el ETF que replica al S&amp;P 500 — el índice que representa a las 500
+    empresas más grandes de EE.UU. y se usa como termómetro del mercado. Una correlación
+    de 1.0 significa que el activo sube y baja exactamente junto con el mercado; de 0,
+    que se mueve independientemente; de −1, que va en sentido contrario (como el oro o
+    ciertos bonos en momentos de pánico). Esta señal ayuda a detectar si un activo
+    ofrece diversificación real o si es simplemente "más de lo mismo".
+  </p>
+</div>
+<div id="c1358e09" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlación rolling de 60 días entre cada ticker y SPY</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>spy_returns <span class="op">=</span> returns[<span class="st">'SPY'</span>]</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>corr_spy <span class="op">=</span> returns.<span class="bu">apply</span>(</span>
@@ -496,7 +507,7 @@ Date
 </section>
 <section id="variable-objetivo-retorno-forward-21-días-fwd_ret_21d" class="level3">
 <h3 class="anchored" data-anchor-id="variable-objetivo-retorno-forward-21-días-fwd_ret_21d">Variable objetivo — Retorno forward 21 días (<code>fwd_ret_21d</code>)</h3>
-<div id="1007afaf" class="cell" data-execution_count="11">
+<div id="d733c026" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno acumulado de los PRÓXIMOS 21 días (shift negativo)</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Se calcula con shift(-21) para que cada fecha tenga el retorno futuro</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>fwd_ret_21d <span class="op">=</span> returns.rolling(<span class="dv">21</span>).<span class="bu">apply</span>(</span>
@@ -518,7 +529,7 @@ Date
 </section>
 <section id="ensamblaje-en-formato-largo" class="level2">
 <h2 class="anchored" data-anchor-id="ensamblaje-en-formato-largo">Ensamblaje en formato largo</h2>
-<div id="b30fc8fd" class="cell" data-execution_count="12">
+<div id="c9ff33f4" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>signal_map <span class="op">=</span> {</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mom_1m'</span>:    mom_1m,</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mom_12m'</span>:   mom_12m,</span>
@@ -574,7 +585,7 @@ Tickers: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'QQQ', 'SPY', 
 </section>
 <section id="resumen-del-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="resumen-del-dataset">Resumen del Dataset</h2>
-<div id="77093bc0" class="cell" data-execution_count="13">
+<div id="8839f276" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> df_signals.groupby(<span class="st">'signal'</span>).agg(</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    observaciones<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'count'</span>),</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    media<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'mean'</span>),</span>
@@ -588,7 +599,7 @@ Tickers: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'QQQ', 'SPY', 
 <pre><code>          observaciones   media  desv_std  minimo   maximo
 signal                                                    
 corr_spy          35739  0.4167    0.5053 -0.9587   1.0000
-mean_rev          36354  0.1551    1.2961 -3.7937   3.9448
+mean_rev          36354  0.1551    1.2961 -3.7938   3.9448
 mom_12m           32859  0.0429    0.2199 -0.8260   1.6651
 mom_1m            36324  0.0040    0.0817 -0.5756   4.0145
 rel_vol           36354  1.0120    0.4419  0.0000  16.2761
@@ -598,13 +609,13 @@ vol_21            36324  0.1822    0.1695  0.0149   2.2343</code></pre>
 </section>
 <section id="guardar-datos-procesados" class="level2">
 <h2 class="anchored" data-anchor-id="guardar-datos-procesados">Guardar datos procesados</h2>
-<div id="6967b368" class="cell" data-execution_count="14">
+<div id="f2f0d9c8" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_signals.to_parquet(<span class="st">'data/processed/signals.parquet'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Guardado: data/processed/signals.parquet"</span>)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tamaño: </span><span class="sc">{</span>Path(<span class="st">'data/processed/signals.parquet'</span>)<span class="sc">.</span>stat()<span class="sc">.</span>st_size <span class="op">/</span> <span class="dv">1024</span><span class="sc">:.1f}</span><span class="ss"> KB"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Guardado: data/processed/signals.parquet
-Tamaño: 2699.8 KB</code></pre>
+Tamaño: 2700.7 KB</code></pre>
 </div>
 </div>
 <div class="insight-box">
