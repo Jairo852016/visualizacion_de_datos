@@ -4,6 +4,7 @@ project:
 
 website:
   title: "Alpha Signals"
+  favicon: favicon.svg
   page-navigation: true
   navbar:
     left:

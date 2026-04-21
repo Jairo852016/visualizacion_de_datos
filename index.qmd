@@ -24,7 +24,7 @@ format:
 <div class="stat-grid">
   <div class="stat-card">
     <div class="stat-label">Universo</div>
-    <div class="stat-value">18</div>
+    <div class="stat-value">15</div>
     <div class="stat-desc">ETFs multi-activo</div>
   </div>
   <div class="stat-card">

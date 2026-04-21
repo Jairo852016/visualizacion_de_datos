@@ -284,6 +284,29 @@ print(corr_spy[['IWM', 'EEM', 'TLT', 'GLD', 'VXX']].tail(3).round(3).to_string()
 
 ### Variable objetivo — Retorno forward 21 días (`fwd_ret_21d`)
 
+```{=html}
+<div class="insight-box">
+  <p>
+    <strong>¿Qué es el retorno forward?</strong><br>
+    Imagina que hoy es lunes. El <em>retorno forward a 21 días</em> te dice cuánto
+    habría ganado (o perdido) una inversión si la hubieras hecho hoy y la hubieras
+    vendido exactamente un mes después (21 días hábiles ≈ 1 mes calendario).
+  </p>
+  <p>
+    Por ejemplo, si SPY vale $400 hoy y $420 dentro de 21 días, el retorno forward es
+    +5 %. Si baja a $380, es −5 %.
+  </p>
+  <p>
+    <strong>¿Para qué sirve?</strong><br>
+    Es la "respuesta correcta" que queremos predecir. El objetivo del análisis es
+    ver si las señales calculadas <em>hoy</em> (momentum, volatilidad, etc.) tienen
+    alguna relación con este número del <em>futuro</em>. Si una señal se calcula
+    con datos de hoy y el retorno forward ocurre en el futuro, no hay trampa:
+    estamos evaluando genuinamente si la señal "sabe algo" sobre lo que viene.
+  </p>
+</div>
+```
+
 ```{python}
 #| echo: true
 # Retorno acumulado de los PRÓXIMOS 21 días (shift negativo)
