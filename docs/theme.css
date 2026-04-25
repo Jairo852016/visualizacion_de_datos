@@ -582,6 +582,36 @@ tr:hover td {
 .insight-box p + p {
   margin-top: 0.85rem;
 }
+
+.insight-box:has(ul)::before {
+  display: none;
+}
+
+.insight-box ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.insight-box ul li {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.insight-box ul li::before {
+  content: '◆';
+  font-size: 0.55rem;
+  color: var(--accent-primary);
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+}
 .insight-box p {
   margin: 0;
   font-size: 0.88rem;

@@ -14,7 +14,7 @@ format:
   <p class="hero-subtitle">
     ¿Pueden las señales técnicas — momentum, reversión a la media y volatilidad —
     predecir retornos futuros en un universo diversificado de activos?
-    Este sitio analiza el poder predictivo de seis señales sobre 18 ETFs
+    Este sitio analiza el poder predictivo de seis señales sobre 14 ETFs
     entre 2015 y 2024.
   </p>
 </section>
@@ -24,7 +24,7 @@ format:
 <div class="stat-grid">
   <div class="stat-card">
     <div class="stat-label">Universo</div>
-    <div class="stat-value">15</div>
+    <div class="stat-value">14</div>
     <div class="stat-desc">ETFs multi-activo</div>
   </div>
   <div class="stat-card">
@@ -182,20 +182,13 @@ format:
       <td><span class="section-tag">Comm</span></td>
     </tr>
 
-    <tr class="etf-group-header"><td colspan="5">Real Estate &amp; Volatilidad</td></tr>
+    <tr class="etf-group-header"><td colspan="5">Real Estate</td></tr>
     <tr>
       <td class="ticker">VNQ</td>
       <td>Vanguard Real Estate ETF</td>
       <td>REITs diversificados de EE.UU.; exposición a bienes raíces cotizados</td>
       <td class="aum">~$35 B</td>
       <td><span class="section-tag teal">REIT</span></td>
-    </tr>
-    <tr>
-      <td class="ticker">VXX</td>
-      <td>iPath Series B S&amp;P 500 VIX Short-Term Futures ETN</td>
-      <td>Futuros de corto plazo del VIX; sube con el miedo, decae en tendencia</td>
-      <td class="aum">~$0.5 B</td>
-      <td><span class="section-tag outline">Vol</span></td>
     </tr>
   </tbody>
 </table>
@@ -239,9 +232,9 @@ format:
   <p>
     El <strong>Information Coefficient (IC)</strong> mide la correlación de Spearman entre
     el valor de cada señal y el retorno forward a 21 días. Un IC positivo indica que la
-    señal predice correctamente la dirección del retorno. Los valores típicamente oscilan
-    entre –0.10 y +0.10; cualquier IC sostenido por encima de 0.05 se considera
-    económicamente significativo.
+    señal predice correctamente la dirección del retorno. Para este conjunto de datos,
+    los valores oscilan entre −0.20 y +0.20; cualquier IC sostenido por encima de 0.05
+    se considera económicamente significativo.
   </p>
   <p>
     Los datos provienen de <code>yfinance</code> (precios de cierre ajustados, 2015–2024).
@@ -268,7 +261,7 @@ format:
     <div style="font-size:1.5rem; margin-bottom:0.5rem;">📥</div>
     <div style="color:#5c5a56; font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.35rem;">Fuente</div>
     <div style="color:#e8e6e0; font-size:0.8rem; font-weight:600; margin-bottom:0.5rem;">yfinance</div>
-    <div style="color:#5c5a56; font-size:0.68rem; line-height:1.5;">18 ETFs<br>2015 – 2024<br>precio ajustado diario</div>
+    <div style="color:#5c5a56; font-size:0.68rem; line-height:1.5;">14 ETFs<br>2015 – 2024<br>precio ajustado diario</div>
   </div>
 
   <!-- Flecha -->

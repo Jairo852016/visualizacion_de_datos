@@ -161,7 +161,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#limpieza" id="toc-limpieza" class="nav-link" data-scroll-target="#limpieza">Limpieza</a></li>
   <li><a href="#retornos-diarios" id="toc-retornos-diarios" class="nav-link" data-scroll-target="#retornos-diarios">Retornos Diarios</a></li>
   <li><a href="#cálculo-de-señales" id="toc-cálculo-de-señales" class="nav-link" data-scroll-target="#cálculo-de-señales">Cálculo de Señales</a></li>
-  <li><a href="#ensamblaje-en-formato-largo" id="toc-ensamblaje-en-formato-largo" class="nav-link" data-scroll-target="#ensamblaje-en-formato-largo">Ensamblaje en formato largo</a></li>
+  <li><a href="#codigo-total" id="toc-codigo-total" class="nav-link" data-scroll-target="#codigo-total">Codigo total</a></li>
   <li><a href="#resumen-del-dataset" id="toc-resumen-del-dataset" class="nav-link" data-scroll-target="#resumen-del-dataset">Resumen del Dataset</a></li>
   <li><a href="#guardar-datos-procesados" id="toc-guardar-datos-procesados" class="nav-link" data-scroll-target="#guardar-datos-procesados">Guardar datos procesados</a></li>
   </ul>
@@ -200,7 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="dependencias" class="level2">
 <h2 class="anchored" data-anchor-id="dependencias">Dependencias</h2>
-<div id="fa49bc0d" class="cell" data-execution_count="1">
+<div id="e0176400" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -229,29 +229,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     precios ya corregidos por dividendos y splits.
   </p>
 </div>
-<div id="84e047c1" class="cell" data-execution_count="2">
+<div id="5b292d7b" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>TICKERS <span class="op">=</span> [</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'SPY'</span>, <span class="st">'QQQ'</span>, <span class="st">'IWM'</span>,          <span class="co"># Renta Variable US</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'EFA'</span>, <span class="st">'EEM'</span>, <span class="st">'VWO'</span>,          <span class="co"># Internacional</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'TLT'</span>, <span class="st">'IEF'</span>, <span class="st">'LQD'</span>, <span class="st">'HYG'</span>,  <span class="co"># Renta Fija</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'GLD'</span>, <span class="st">'USO'</span>, <span class="st">'DBC'</span>,          <span class="co"># Commodities</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'VNQ'</span>,                         <span class="co"># Real Estate</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'VXX'</span>,                         <span class="co"># Volatilidad</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>START <span class="op">=</span> <span class="st">'2015-01-01'</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>END   <span class="op">=</span> <span class="st">'2024-12-31'</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> yf.download(TICKERS, start<span class="op">=</span>START, end<span class="op">=</span>END, auto_adjust<span class="op">=</span><span class="va">True</span>, progress<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> raw[<span class="st">'Close'</span>].copy()</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Forma del dataset: </span><span class="sc">{</span>prices<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Período: </span><span class="sc">{</span>prices<span class="sc">.</span>index[<span class="dv">0</span>]<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>prices<span class="sc">.</span>index[<span class="op">-</span><span class="dv">1</span>]<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickers descargados: </span><span class="sc">{</span><span class="bu">list</span>(prices.columns)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>START <span class="op">=</span> <span class="st">'2015-01-01'</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>END   <span class="op">=</span> <span class="st">'2024-12-31'</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> yf.download(TICKERS, start<span class="op">=</span>START, end<span class="op">=</span>END, auto_adjust<span class="op">=</span><span class="va">True</span>, progress<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> raw[<span class="st">'Close'</span>].copy()</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Forma del dataset: </span><span class="sc">{</span>prices<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Período: </span><span class="sc">{</span>prices<span class="sc">.</span>index[<span class="dv">0</span>]<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>prices<span class="sc">.</span>index[<span class="op">-</span><span class="dv">1</span>]<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickers descargados: </span><span class="sc">{</span><span class="bu">list</span>(prices.columns)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Forma del dataset: (2515, 15)
+<pre><code>Forma del dataset: (2515, 14)
 Período: 2015-01-02 → 2024-12-30
-Tickers descargados: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'QQQ', 'SPY', 'TLT', 'USO', 'VNQ', 'VWO', 'VXX']</code></pre>
+Tickers descargados: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'QQQ', 'SPY', 'TLT', 'USO', 'VNQ', 'VWO']</code></pre>
 </div>
 </div>
 </section>
@@ -264,7 +263,7 @@ Tickers descargados: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'Q
     de esa fecha y los NaN anteriores se dejan como están (no se imputan).
   </p>
 </div>
-<div id="9e734ac4" class="cell" data-execution_count="3">
+<div id="d24d7fe1" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos faltantes por ticker</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>missing <span class="op">=</span> prices.isnull().<span class="bu">sum</span>()</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>missing_pct <span class="op">=</span> (missing <span class="op">/</span> <span class="bu">len</span>(prices) <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
@@ -280,9 +279,7 @@ Tickers descargados: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'Q
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>prices.to_parquet(<span class="st">'data/raw/prices.parquet'</span>)</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Precios guardados en data/raw/prices.parquet"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>        Faltantes  Porcentaje
-Ticker                       
-VXX           771       30.66
+<pre><code>Sin datos faltantes.
 
 Precios guardados en data/raw/prices.parquet</code></pre>
 </div>
@@ -290,7 +287,7 @@ Precios guardados en data/raw/prices.parquet</code></pre>
 </section>
 <section id="retornos-diarios" class="level2">
 <h2 class="anchored" data-anchor-id="retornos-diarios">Retornos Diarios</h2>
-<div id="7e05006f" class="cell" data-execution_count="4">
+<div id="b804a1eb" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>returns <span class="op">=</span> prices.pct_change()</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminar filas donde TODOS los tickers son NaN (e.g. feriados)</span></span>
@@ -300,18 +297,18 @@ Precios guardados en data/raw/prices.parquet</code></pre>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Estadísticas de retornos diarios:"</span>)</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(returns.describe().<span class="bu">round</span>(<span class="dv">4</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Retornos calculados: (2514, 15)
+<pre><code>Retornos calculados: (2514, 14)
 
 Estadísticas de retornos diarios:
-Ticker        DBC        EEM        EFA        GLD        HYG        IEF        IWM        LQD        QQQ        SPY        TLT        USO        VNQ        VWO        VXX
-count   2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  1743.0000
-mean       0.0002     0.0002     0.0003     0.0003     0.0002     0.0000     0.0004     0.0001     0.0008     0.0005    -0.0000     0.0000     0.0003     0.0002    -0.0010
-std        0.0112     0.0130     0.0109     0.0089     0.0054     0.0042     0.0142     0.0054     0.0137     0.0111     0.0096     0.0249     0.0131     0.0125     0.0470
-min       -0.0794    -0.1248    -0.1099    -0.0537    -0.0550    -0.0251    -0.1327    -0.0500    -0.1198    -0.1094    -0.0667    -0.2532    -0.1773    -0.1209    -0.1924
-25%       -0.0059    -0.0067    -0.0048    -0.0046    -0.0019    -0.0024    -0.0069    -0.0023    -0.0051    -0.0037    -0.0058    -0.0121    -0.0058    -0.0064    -0.0263
-50%        0.0008     0.0007     0.0005     0.0005     0.0002     0.0001     0.0008     0.0003     0.0012     0.0006     0.0003     0.0009     0.0006     0.0007    -0.0076
-75%        0.0066     0.0076     0.0059     0.0051     0.0023     0.0025     0.0081     0.0027     0.0079     0.0059     0.0057     0.0133     0.0071     0.0072     0.0160
-max        0.0480     0.0805     0.0847     0.0490     0.0655     0.0264     0.0915     0.0739     0.0847     0.0906     0.0752     0.1667     0.0900     0.0778     0.3922</code></pre>
+Ticker        DBC        EEM        EFA        GLD        HYG        IEF        IWM        LQD        QQQ        SPY        TLT        USO        VNQ        VWO
+count   2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000  2514.0000
+mean       0.0002     0.0002     0.0003     0.0003     0.0002     0.0000     0.0004     0.0001     0.0008     0.0005    -0.0000     0.0000     0.0003     0.0002
+std        0.0112     0.0130     0.0109     0.0089     0.0054     0.0042     0.0142     0.0054     0.0137     0.0111     0.0096     0.0249     0.0131     0.0125
+min       -0.0794    -0.1248    -0.1099    -0.0537    -0.0550    -0.0251    -0.1327    -0.0500    -0.1198    -0.1094    -0.0667    -0.2532    -0.1773    -0.1209
+25%       -0.0059    -0.0067    -0.0048    -0.0046    -0.0019    -0.0024    -0.0069    -0.0023    -0.0051    -0.0037    -0.0058    -0.0121    -0.0058    -0.0064
+50%        0.0008     0.0007     0.0005     0.0005     0.0002     0.0001     0.0008     0.0003     0.0012     0.0006     0.0003     0.0009     0.0006     0.0007
+75%        0.0066     0.0076     0.0059     0.0051     0.0023     0.0025     0.0081     0.0027     0.0079     0.0059     0.0057     0.0133     0.0071     0.0072
+max        0.0480     0.0805     0.0847     0.0490     0.0655     0.0264     0.0915     0.0739     0.0847     0.0906     0.0752     0.1667     0.0900     0.0778</code></pre>
 </div>
 </div>
 </section>
@@ -337,7 +334,7 @@ max        0.0480     0.0805     0.0847     0.0490     0.0655     0.0264     0.0
     su inercia.
   </p>
 </div>
-<div id="18a65bca" class="cell" data-execution_count="5">
+<div id="7577b22e" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno acumulado de los últimos 21 días de trading</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>mom_1m <span class="op">=</span> returns.rolling(<span class="dv">21</span>).<span class="bu">apply</span>(<span class="kw">lambda</span> x: (<span class="dv">1</span> <span class="op">+</span> x).prod() <span class="op">-</span> <span class="dv">1</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -365,7 +362,7 @@ Date
     Es como distinguir entre una moda pasajera y una tendencia real.
   </p>
 </div>
-<div id="b773a648" class="cell" data-execution_count="6">
+<div id="c4f2c55b" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno de los últimos 252 días excluyendo el último mes (21 días)</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Evita el efecto de reversión de corto plazo documentado en la literatura</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mom_12m_func(price_series):</span>
@@ -398,7 +395,7 @@ Date
     los precios tienden a volver a su media, como un péndulo que oscila.
   </p>
 </div>
-<div id="cb0807f4" class="cell" data-execution_count="7">
+<div id="6c0368f4" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Z-score del precio actual respecto a la media móvil de 20 días</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Un z-score negativo indica precio por debajo de su media reciente (posible rebote)</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>rolling_mean <span class="op">=</span> prices.rolling(<span class="dv">20</span>).mean()</span>
@@ -429,7 +426,7 @@ Date
     el mercado está nervioso hoy, probablemente seguirá nervioso mañana.
   </p>
 </div>
-<div id="b4610127" class="cell" data-execution_count="8">
+<div id="7abff90a" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Desviación estándar de retornos diarios en los últimos 21 días, anualizada</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>vol_21 <span class="op">=</span> returns.rolling(<span class="dv">21</span>).std() <span class="op">*</span> np.sqrt(<span class="dv">252</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -457,7 +454,7 @@ Date
     subiendo <em>y</em> volumen alto es más confiable que uno con volumen bajo.
   </p>
 </div>
-<div id="4786e289" class="cell" data-execution_count="9">
+<div id="547942d7" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Volumen del día dividido entre el promedio de volumen de los últimos 20 días</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>volume <span class="op">=</span> raw[<span class="st">'Volume'</span>].copy()</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>rel_vol <span class="op">=</span> volume <span class="op">/</span> volume.rolling(<span class="dv">20</span>).mean()</span>
@@ -487,22 +484,24 @@ Date
     ofrece diversificación real o si es simplemente "más de lo mismo".
   </p>
 </div>
-<div id="ee6da708" class="cell" data-execution_count="10">
+<div id="0ef5003e" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlación rolling de 60 días entre cada ticker y SPY</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>spy_returns <span class="op">=</span> returns[<span class="st">'SPY'</span>]</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>corr_spy <span class="op">=</span> returns.<span class="bu">apply</span>(</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> col: col.rolling(<span class="dv">60</span>).corr(spy_returns)</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"corr_spy — últimas 3 fechas (IWM, EEM, TLT, GLD, VXX):"</span>)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(corr_spy[[<span class="st">'IWM'</span>, <span class="st">'EEM'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>, <span class="st">'VXX'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">3</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># SPY correlacionado consigo mismo siempre da 1.0 — sin varianza, sin información</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>corr_spy[<span class="st">'SPY'</span>] <span class="op">=</span> np.nan</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"corr_spy — últimas 3 fechas (IWM, EEM, TLT, GLD, VNQ):"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(corr_spy[[<span class="st">'IWM'</span>, <span class="st">'EEM'</span>, <span class="st">'TLT'</span>, <span class="st">'GLD'</span>, <span class="st">'VNQ'</span>]].tail(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">3</span>).to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>corr_spy — últimas 3 fechas (IWM, EEM, TLT, GLD, VXX):
-Ticker        IWM    EEM    TLT    GLD    VXX
+<pre><code>corr_spy — últimas 3 fechas (IWM, EEM, TLT, GLD, VNQ):
+Ticker        IWM    EEM    TLT    GLD    VNQ
 Date                                         
-2024-12-26  0.799  0.249  0.037  0.158 -0.816
-2024-12-27  0.804  0.264  0.052  0.171 -0.820
-2024-12-30  0.801  0.273  0.020  0.174 -0.818</code></pre>
+2024-12-26  0.799  0.249  0.037  0.158  0.416
+2024-12-27  0.804  0.264  0.052  0.171  0.426
+2024-12-30  0.801  0.273  0.020  0.174  0.425</code></pre>
 </div>
 </div>
 </section>
@@ -521,14 +520,14 @@ Date
   </p>
   <p>
     <strong>¿Para qué sirve?</strong><br>
-    Es la "respuesta correcta" que queremos predecir. El objetivo del análisis es
+    El objetivo del análisis es
     ver si las señales calculadas <em>hoy</em> (momentum, volatilidad, etc.) tienen
     alguna relación con este número del <em>futuro</em>. Si una señal se calcula
     con datos de hoy y el retorno forward ocurre en el futuro, no hay trampa:
-    estamos evaluando genuinamente si la señal "sabe algo" sobre lo que viene.
+    estamos evaluando genuinamente si la señal.
   </p>
 </div>
-<div id="b53a9446" class="cell" data-execution_count="11">
+<div id="3ba0c8a2" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retorno acumulado de los PRÓXIMOS 21 días (shift negativo)</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Se calcula con shift(-21) para que cada fecha tenga el retorno futuro</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>fwd_ret_21d <span class="op">=</span> returns.rolling(<span class="dv">21</span>).<span class="bu">apply</span>(</span>
@@ -548,9 +547,9 @@ Date
 </div>
 </section>
 </section>
-<section id="ensamblaje-en-formato-largo" class="level2">
-<h2 class="anchored" data-anchor-id="ensamblaje-en-formato-largo">Ensamblaje en formato largo</h2>
-<div id="d78cf04d" class="cell" data-execution_count="12">
+<section id="codigo-total" class="level2">
+<h2 class="anchored" data-anchor-id="codigo-total">Codigo total</h2>
+<div id="cab5116c" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>signal_map <span class="op">=</span> {</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mom_1m'</span>:    mom_1m,</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mom_12m'</span>:   mom_12m,</span>
@@ -595,18 +594,18 @@ Date
 <span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Señales: </span><span class="sc">{</span>df_signals[<span class="st">'signal'</span>]<span class="sc">.</span>unique()<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickers: </span><span class="sc">{</span><span class="bu">sorted</span>(df_signals[<span class="st">'ticker'</span>].unique().tolist())<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Dataset final: 213,954 filas × 6 columnas
+<pre><code>Dataset final: 201,574 filas × 6 columnas
 
 Columnas: ['date', 'ticker', 'value', 'signal', 'fwd_ret_21d', 'asset_class']
 
 Señales: ['mom_1m', 'mom_12m', 'mean_rev', 'vol_21', 'rel_vol', 'corr_spy']
-Tickers: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'QQQ', 'SPY', 'TLT', 'USO', 'VNQ', 'VWO', 'VXX']</code></pre>
+Tickers: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'QQQ', 'SPY', 'TLT', 'USO', 'VNQ', 'VWO']</code></pre>
 </div>
 </div>
 </section>
 <section id="resumen-del-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="resumen-del-dataset">Resumen del Dataset</h2>
-<div id="b88b9e3a" class="cell" data-execution_count="13">
+<div id="60cce4fd" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> df_signals.groupby(<span class="st">'signal'</span>).agg(</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    observaciones<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'count'</span>),</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    media<span class="op">=</span>(<span class="st">'value'</span>, <span class="st">'mean'</span>),</span>
@@ -619,24 +618,24 @@ Tickers: ['DBC', 'EEM', 'EFA', 'GLD', 'HYG', 'IEF', 'IWM', 'LQD', 'QQQ', 'SPY', 
 <div class="cell-output cell-output-stdout">
 <pre><code>          observaciones   media  desv_std  minimo   maximo
 signal                                                    
-corr_spy          35739  0.4167    0.5053 -0.9587   1.0000
-mean_rev          36354  0.1551    1.2961 -3.7938   3.9448
-mom_12m           32859  0.0429    0.2199 -0.8260   1.6651
-mom_1m            36324  0.0040    0.0817 -0.5756   4.0145
-rel_vol           36354  1.0120    0.4419  0.0000  16.2761
-vol_21            36324  0.1822    0.1695  0.0149   2.2343</code></pre>
+corr_spy          31642  0.4346    0.4316 -0.7119   0.9911
+mean_rev          34650  0.1856    1.2932 -3.7938   3.6708
+mom_12m           31388  0.0617    0.1905 -0.8260   1.4601
+mom_1m            34622  0.0054    0.0536 -0.5756   0.4689
+rel_vol           34650  1.0088    0.4111  0.0001  11.4876
+vol_21            34622  0.1591    0.1150  0.0149   1.7012</code></pre>
 </div>
 </div>
 </section>
 <section id="guardar-datos-procesados" class="level2">
 <h2 class="anchored" data-anchor-id="guardar-datos-procesados">Guardar datos procesados</h2>
-<div id="e9ba38ec" class="cell" data-execution_count="14">
+<div id="c51469d4" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_signals.to_parquet(<span class="st">'data/processed/signals.parquet'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Guardado: data/processed/signals.parquet"</span>)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tamaño: </span><span class="sc">{</span>Path(<span class="st">'data/processed/signals.parquet'</span>)<span class="sc">.</span>stat()<span class="sc">.</span>st_size <span class="op">/</span> <span class="dv">1024</span><span class="sc">:.1f}</span><span class="ss"> KB"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Guardado: data/processed/signals.parquet
-Tamaño: 2700.4 KB</code></pre>
+Tamaño: 2575.4 KB</code></pre>
 </div>
 </div>
 <div class="insight-box">

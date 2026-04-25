@@ -54,7 +54,6 @@ TICKERS = [
     'TLT', 'IEF', 'LQD', 'HYG',  # Renta Fija
     'GLD', 'USO', 'DBC',          # Commodities
     'VNQ',                         # Real Estate
-    'VXX',                         # Volatilidad
 ]
 
 START = '2015-01-01'
@@ -277,9 +276,11 @@ spy_returns = returns['SPY']
 corr_spy = returns.apply(
     lambda col: col.rolling(60).corr(spy_returns)
 )
+# SPY correlacionado consigo mismo siempre da 1.0 — sin varianza, sin información
+corr_spy['SPY'] = np.nan
 
-print("corr_spy — últimas 3 fechas (IWM, EEM, TLT, GLD, VXX):")
-print(corr_spy[['IWM', 'EEM', 'TLT', 'GLD', 'VXX']].tail(3).round(3).to_string())
+print("corr_spy — últimas 3 fechas (IWM, EEM, TLT, GLD, VNQ):")
+print(corr_spy[['IWM', 'EEM', 'TLT', 'GLD', 'VNQ']].tail(3).round(3).to_string())
 ```
 
 ### Variable objetivo — Retorno forward 21 días (`fwd_ret_21d`)
@@ -298,11 +299,11 @@ print(corr_spy[['IWM', 'EEM', 'TLT', 'GLD', 'VXX']].tail(3).round(3).to_string()
   </p>
   <p>
     <strong>¿Para qué sirve?</strong><br>
-    Es la "respuesta correcta" que queremos predecir. El objetivo del análisis es
+    El objetivo del análisis es
     ver si las señales calculadas <em>hoy</em> (momentum, volatilidad, etc.) tienen
     alguna relación con este número del <em>futuro</em>. Si una señal se calcula
     con datos de hoy y el retorno forward ocurre en el futuro, no hay trampa:
-    estamos evaluando genuinamente si la señal "sabe algo" sobre lo que viene.
+    estamos evaluando genuinamente si la señal.
   </p>
 </div>
 ```
@@ -319,7 +320,7 @@ print("fwd_ret_21d — muestra (primeras fechas con datos válidos):")
 print(fwd_ret_21d[['SPY', 'QQQ', 'TLT', 'GLD']].dropna().head(3).round(4).to_string())
 ```
 
-## Ensamblaje en formato largo
+## Codigo total
 
 ```{python}
 #| echo: true
